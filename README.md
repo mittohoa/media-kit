@@ -3,6 +3,8 @@
 **Dọn gọn thư viện ảnh, và chỉ cho bạn ảnh nào có thể đẹp hơn.**
 Toàn bộ phân tích chạy trên máy bạn — không ảnh nào rời khỏi thiết bị.
 
+**[Trang giới thiệu và tải về →](https://mittohoa.github.io/media-kit/)**
+
 ---
 
 | Dọn dẹp | Giới thiệu | Cài đặt |
