@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media KIT — dọn gọn thư viện ảnh</title>
+<meta name="description" content="Dọn gọn thư viện ảnh, và chỉ cho bạn ảnh nào có thể đẹp hơn. Toàn bộ phân tích chạy trên máy bạn — không ảnh nào rời khỏi thiết bị.">
+<meta property="og:title" content="Media KIT">
+<meta property="og:description" content="Dọn gọn thư viện ảnh, và chỉ cho bạn ảnh nào có thể đẹp hơn. Chạy hoàn toàn trên máy bạn.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+<style>
+  :root {
+    --bg: #0b0b10;
+    --surface: #16161f;
+    --border: #262633;
+    --text: #f2f2f7;
+    --muted: #9b9baa;
+    --brand-a: #5b4be8;
+    --brand-b: #a04be8;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  a { color: #b9aaff; }
+
+  /* ── hero ─────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--brand-a), var(--brand-b));
+    padding: 72px 0 64px;
+  }
+  .hero h1 {
+    margin: 0 0 4px;
+    font-size: clamp(2.4rem, 7vw, 3.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .hero .tagline {
+    margin: 0 0 8px;
+    font-size: clamp(1.1rem, 3.2vw, 1.4rem);
+    font-weight: 600;
+    max-width: 30ch;
+  }
+  .hero .sub { margin: 0; color: rgba(255,255,255,.82); max-width: 46ch; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 22px; border-radius: 999px;
+    font-weight: 700; text-decoration: none;
+    border: 1px solid transparent;
+  }
+  .btn-primary { background: #fff; color: #3a2ea8; }
+  .btn-ghost { background: rgba(255,255,255,.16); color: #fff; border-color: rgba(255,255,255,.3); }
+  .btn:hover { filter: brightness(1.06); }
+  .version-note {
+    margin-top: 14px; font-size: .9rem; color: rgba(255,255,255,.75);
+  }
+
+  /* ── sections ─────────────────────────────────────── */
+  section { padding: 60px 0; border-top: 1px solid var(--border); }
+  section:first-of-type { border-top: 0; }
+  h2 { font-size: 1.6rem; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .lead { color: var(--muted); margin: 0 0 28px; max-width: 62ch; }
+
+  .cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px;
+  }
+  .card h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .card p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .card .emoji { font-size: 1.6rem; display: block; margin-bottom: 10px; }
+
+  ul.plain { margin: 0; padding-left: 1.15em; color: var(--muted); }
+  ul.plain li { margin-bottom: 8px; }
+  ul.plain strong { color: var(--text); font-weight: 600; }
+
+  /* ── shots ────────────────────────────────────────── */
+  .shots { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .shot { text-align: center; }
+  .shot img {
+    width: 100%; max-width: 260px; height: auto;
+    border-radius: 18px; border: 1px solid var(--border);
+  }
+  .shot figcaption { color: var(--muted); font-size: .88rem; margin-top: 10px; }
+  .note {
+    margin-top: 26px; padding: 16px 18px;
+    border-left: 3px solid var(--brand-b);
+    background: var(--surface); border-radius: 0 12px 12px 0;
+    color: var(--muted); font-size: .93rem;
+  }
+
+  /* ── download table ───────────────────────────────── */
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 460px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: .88rem; text-transform: uppercase; letter-spacing: .04em; }
+  td code { background: #21212e; padding: 2px 7px; border-radius: 6px; font-size: .9em; }
+
+  footer {
+    padding: 40px 0 60px; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: .92rem;
+  }
+  footer p { margin: 0 0 8px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Media KIT</h1>
+    <p class="tagline">Dọn gọn thư viện ảnh, và chỉ cho bạn ảnh nào có thể đẹp hơn.</p>
+    <p class="sub">Toàn bộ phân tích chạy trên máy bạn. Không ảnh nào rời khỏi thiết bị.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" id="dl-arm64"
+         href="https://github.com/mittohoa/media-kit/releases/latest">⬇ Tải APK cho Android</a>
+      <a class="btn btn-ghost"
+         href="https://github.com/mittohoa/media-kit">Xem mã nguồn &amp; tài liệu</a>
+    </div>
+    <p class="version-note" id="version-note">Cần Android 7.0 trở lên.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <h2>Media KIT giải quyết chuyện gì</h2>
+    <p class="lead">
+      Điện thoại đầy bộ nhớ, mà nhìn vào thư viện thì không biết xoá gì. Mười tấm
+      giống hệt nhau, ảnh mờ, ảnh chụp màn hình từ năm ngoái — chúng lẫn vào nhau
+      và không ai đủ kiên nhẫn lọc tay. Ngược lại, có những tấm đáng giữ nhưng hơi
+      nghiêng, hơi lệch bố cục. Biết là chưa đẹp nhưng không biết sai ở đâu.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <span class="emoji">🧹</span>
+        <h3>Dọn dẹp</h3>
+        <p>Gom ảnh trùng, ảnh tương tự, ảnh mờ, ảnh chụp màn hình, bản chia sẻ chất
+           lượng thấp — kèm dung lượng giải phóng được của từng nhóm.</p>
+      </div>
+      <div class="card">
+        <span class="emoji">✨</span>
+        <h3>Nâng chất lượng</h3>
+        <p>Chấm điểm từng ảnh, kỹ thuật và thẩm mỹ tách riêng, chỉ ra sai ở đâu và
+           dựng sẵn vài phương án chỉnh sửa để bạn chọn.</p>
+      </div>
+      <div class="card">
+        <span class="emoji">🔒</span>
+        <h3>Chạy ngoại tuyến</h3>
+        <p>App chạm mạng đúng một việc: kiểm tra bản cập nhật, và chỉ khi bạn tự
+           bấm. Ngắt mạng rồi dùng thử là kiểm chứng được.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Ba nguyên tắc không thoả hiệp</h2>
+    <ul class="plain">
+      <li><strong>Không bao giờ tự xoá.</strong> App chỉ đề xuất; bạn tự tick, tự
+          bấm. Ảnh đã xoá nằm trong thùng rác 30 ngày.</li>
+      <li><strong>Không bao giờ ghi đè ảnh gốc.</strong> Mỗi lần chỉnh sửa ghi ra
+          một file mới trong album riêng, đóng dấu để tra ngược về ảnh gốc.</li>
+      <li><strong>Không gửi ảnh đi đâu.</strong> Không tài khoản, không máy chủ,
+          không thống kê.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Nhìn thử</h2>
+    <p class="lead">Kích thước hình tròn tỉ lệ với dung lượng — nhìn là biết dung
+       lượng đang nằm ở nhóm nào.</p>
+
+    <div class="shots">
+      <figure class="shot">
+        <img src="screenshots/01-home.png" alt="Màn Dọn dẹp với các bong bóng theo dung lượng" loading="lazy">
+        <figcaption>Dọn dẹp</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="screenshots/02-about.png" alt="Màn Giới thiệu" loading="lazy">
+        <figcaption>Giới thiệu</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="screenshots/03-settings.png" alt="Màn Cài đặt" loading="lazy">
+        <figcaption>Cài đặt</figcaption>
+      </figure>
+    </div>
+
+    <p class="note">
+      Ảnh chụp màn hình cố ý chỉ lấy những màn không có ảnh cá nhân nào — kể cả
+      của chính tác giả. Các màn chi tiết nhóm, chấm điểm và gợi ý bố cục sẽ được
+      bổ sung sau, chụp trên một thư viện ảnh minh hoạ dựng riêng chứ không phải
+      ảnh thật.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Tải về</h2>
+    <p class="lead">Chưa lên Google Play. Tải file APK rồi mở, Android sẽ hỏi có
+       cho phép cài từ nguồn này không — đồng ý là xong.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>File</th><th>Dùng cho</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>arm64-v8a</code></td>
+            <td>Hầu hết điện thoại từ 2017 trở lại đây</td>
+          </tr>
+          <tr>
+            <td><code>armeabi-v7a</code></td>
+            <td>Máy cũ, 32-bit</td>
+          </tr>
+          <tr>
+            <td><code>x86_64</code></td>
+            <td>Máy ảo Android</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="https://github.com/mittohoa/media-kit/releases/latest">
+        Mở trang phát hành
+      </a>
+    </div>
+
+    <p class="lead" style="margin-top:24px">
+      Cài rồi thì không cần quay lại đây: màn <strong>Giới thiệu</strong> trong app
+      có sẵn nút kiểm tra bản cập nhật.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Nền tảng</h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Nền tảng</th><th>Trạng thái</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Android 7.0+</td><td>Đầy đủ</td></tr>
+          <tr><td>Windows</td><td>Đầy đủ, trừ phần khuôn mặt và phân vùng chủ thể</td></tr>
+          <tr><td>iOS 15.5+</td><td>Chưa dựng thử lần nào — cần macOS + Xcode</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Góp ý, báo lỗi: <a href="mailto:mittohoa@gmail.com">mittohoa@gmail.com</a></p>
+    <p><a href="https://github.com/mittohoa/media-kit">Repo</a> ·
+       <a href="https://github.com/mittohoa/media-kit/blob/main/PROJECT.MD">Đặc tả dự án</a> ·
+       <a href="https://github.com/mittohoa/media-kit/blob/main/photos.md">Nghiên cứu bố cục ảnh</a></p>
+  </div>
+</footer>
+
+<script>
+// Nút tải mặc định trỏ tới trang phát hành — luôn đúng kể cả khi script này
+// không chạy được. Nếu gọi API thành công thì thay bằng link tải thẳng file
+// arm64 của bản mới nhất, vì đó là thứ gần như ai cũng cần.
+(async () => {
+  try {
+    const r = await fetch('https://api.github.com/repos/mittohoa/media-kit/releases/latest');
+    if (!r.ok) return;
+    const rel = await r.json();
+    const apk = (rel.assets || []).find(a => /arm64/.test(a.name));
+    const btn = document.getElementById('dl-arm64');
+    if (apk && btn) {
+      btn.href = apk.browser_download_url;
+      btn.textContent = '⬇ Tải APK ' + rel.tag_name.replace(/^v/, '');
+    }
+    const note = document.getElementById('version-note');
+    if (note) {
+      const mb = apk ? ' · ' + (apk.size / 1048576).toFixed(1) + ' MB' : '';
+      note.textContent = 'Bản mới nhất ' + rel.tag_name.replace(/^v/, '')
+        + mb + ' · Cần Android 7.0 trở lên';
+    }
+  } catch (e) { /* để nguyên link dự phòng */ }
+})();
+</script>
+
+</body>
+</html>
