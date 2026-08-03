@@ -1,9 +1,9 @@
 {
-  "versionCode": 6,
-  "versionName": "1.0.5",
+  "versionCode": 7,
+  "versionName": "1.0.6",
   "releasedAt": "2026-08-04",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.5/MediaKIT-1.0.5-arm64-v8a.apk",
-  "sizeBytes": 33919688,
-  "sha256": "77f4adb213acdc5a33ed5ee22c68f62d30d7e75376974d81df72d0cdffb73d52",
-  "notes": "Sửa hai chỗ khó nhìn ở màn xem ảnh. Lớp nền tối trước đây chỉ bắt đầu từ khối chữ, nên dải ảnh nhỏ và tên file nổi trần trên ảnh — gặp ảnh nền sáng như mặt bàn gỗ hay tường trắng là chữ trắng biến mất hẳn. Thanh trên cũng vậy, số thứ tự và nút chìm luôn vào ảnh. Giờ cả hai đầu đều có nền chuyển màu riêng, số thứ tự nằm trong một viên nền mờ và các nút thành nút tròn nền mờ. Cụm dưới cũng thu gọn: tên file, kích thước và dung lượng gộp về một dòng thay vì ba, hai nút to đổi thành biểu tượng nhỏ có nhãn. Ở màn xem ảnh thì mọi pixel dành cho khung nút là pixel lấy mất của ảnh, mà ảnh mới là thứ cần nhìn để quyết định."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.6/MediaKIT-1.0.6-arm64-v8a.apk",
+  "sizeBytes": 33985224,
+  "sha256": "e73073d22f6a7cbde94d090d0a1cea695a5396dffa3beabb52013e887e73d505",
+  "notes": "Tìm ảnh mờ đúng hơn hẳn. Ngưỡng cũ neo vào trung vị độ nét của thư viện, nhưng đo lại thì với mọi thư viện ảnh chụp thật nó đều bị kẹp ở trần và đứng im — phần thích ứng theo thư viện chưa bao giờ thật sự hoạt động. Nặng hơn: ảnh mờ nhoè gần như không còn chênh lệch sáng tối nên dấu vân nội dung của chúng giống nhau bất kể chụp cái gì, và chúng dính vào nhau thành một nhóm ảnh tương tự giả trước khi kịp rơi vào mục Ảnh mờ. Đó là lý do mục này có lúc tự rỗng đi. Đo trên một thư viện 259 ảnh thật: từ 1,8 MB lên 4,5 MB. Ảnh giữ lại của mỗi nhóm giờ được nhớ lâu dài. Trước đây chọn Giữ ảnh này rồi bấm quay lại là mất, mà ở mục ảnh tương tự thì người ta thường duyệt qua nhiều nhóm rồi mới xoá một lượt. Giờ lựa chọn đó sống qua cả lần quét sau, và luôn thắng phỏng đoán của app."
 }
