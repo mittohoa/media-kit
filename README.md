@@ -5,6 +5,16 @@ Toàn bộ phân tích chạy trên máy bạn — không ảnh nào rời khỏ
 
 ---
 
+| Dọn dẹp | Giới thiệu | Cài đặt |
+|---|---|---|
+| <img src="docs/screenshots/01-home.png" width="240"> | <img src="docs/screenshots/02-about.png" width="240"> | <img src="docs/screenshots/03-settings.png" width="240"> |
+
+Kích thước hình tròn tỉ lệ với dung lượng — nhìn là biết dung lượng đang nằm ở
+nhóm nào.
+
+> Ảnh chụp màn hình cố ý chỉ lấy những màn không có ảnh cá nhân nào.
+
+
 ## Media KIT giải quyết chuyện gì
 
 Điện thoại đầy bộ nhớ, mà nhìn vào thư viện thì không biết xoá gì. Mười tấm giống
