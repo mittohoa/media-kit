@@ -732,19 +732,94 @@ Nội dung bắt buộc, theo đúng thứ tự đó:
 
 ### 11.1 Cập nhật trong app
 
-Chỉ kiểm tra **khi người dùng tự bấm**, không tự chạy nền. Đây là ràng buộc
-thiết kế chứ không phải tiết kiệm pin: app không gửi gì ra mạng trong lúc làm
-việc với ảnh, và giữ đúng như vậy thì lời hứa "mọi phân tích chạy trên máy bạn"
-mới kiểm chứng được bằng cách ngắt mạng rồi dùng thử.
+Bản đầu chỉ kiểm tra **khi người dùng tự bấm**. Về nguyên tắc thì sạch, nhưng
+đo trên thực tế thì hỏng: một máy chạy 1.0.1 nằm im vô thời hạn dù 1.0.2 đã
+phát hành, vì chẳng có gì báo cho biết mà bấm. Không ai vào màn Giới thiệu để
+kiểm tra cập nhật.
 
-Cơ chế: hỏi GitHub Releases của repo public, so phiên bản **theo từng số** chứ
-không so chuỗi (so chuỗi thì `1.10.0` nhỏ hơn `1.9.0`, và người dùng sẽ không
-bao giờ được báo có bản mới sau bản 1.9). Có bản mới thì mở link tải trong
-trình duyệt — không tự tải và tự cài, nên không cần quyền cài đặt gói, và người
-dùng luôn thấy rõ mình đang tải gì.
+Nên đổi thành **tự hỏi, nhưng hỏi thưa và hỏi lặng**: chỉ hỏi lúc mở app, nhiều
+nhất mỗi ngày một lần, không thông báo hệ thống, không tác vụ nền, không xin
+thêm quyền chạy nền nào. Câu "chỉ chạm mạng khi bạn tự bấm" trong README và màn
+Giới thiệu đã được sửa lại cho đúng thay vì để nguyên — nói sai về việc mình
+chạm mạng lúc nào thì tệ hơn hẳn việc chạm mạng.
 
-Repo chưa có bản phát hành nào thì GitHub trả 404; coi đó là "đang dùng bản mới
-nhất" chứ không phải lỗi.
+#### Vì sao là `version.json` chứ không phải API của GitHub
+
+Bản đầu hỏi `api.github.com/repos/.../releases/latest`. Ba vấn đề:
+
+1. API đó giới hạn 60 lượt mỗi giờ cho mỗi địa chỉ IP không đăng nhập. Một mạng
+   công ty hay quán cà phê dùng chung IP là đủ chạm trần.
+2. Nó trả về một cấu trúc rất lớn mà app chỉ dùng bốn trường.
+3. Quan trọng nhất: **không có chỗ nào đặt sha256 của file APK**. Không có
+   sha256 thì app không thể biết file vừa tải có đúng là file đã phát hành hay
+   không trước khi mở trình cài đặt.
+
+Nên chuyển sang một file JSON tĩnh do chính mình phát hành, đặt cạnh trang giới
+thiệu tại `https://mittohoa.github.io/media-kit/version.json`:
+
+```json
+{
+  "versionCode": 4,
+  "versionName": "1.0.3",
+  "releasedAt": "2026-08-03",
+  "apkUrl": "https://github.com/.../MediaKIT-1.0.3-arm64-v8a.apk",
+  "sizeBytes": 33787716,
+  "sha256": "…64 ký tự hexa…",
+  "notes": "Tóm tắt bản này, hiện nguyên văn trong hộp mời cập nhật."
+}
+```
+
+So bằng `versionCode` (số nguyên) chứ không phải `versionName` (chuỗi): số
+nguyên tăng dần thì không có chuyện `1.10.0` bị coi là cũ hơn `1.9.0`, cũng
+không phải đoán ý nghĩa của hậu tố `-beta`.
+
+#### Luồng
+
+1. Mở app → nếu quá một ngày kể từ lần hỏi trước thì đọc `version.json`.
+2. Có bản mới → hiện tấm thẻ trượt lên, kèm **nguyên văn `notes`**. Gạt đi thì
+   nhớ đúng bản đó và không hỏi lại; bản mới hơn nữa vẫn hiện.
+3. Bấm tải → tải nền, có thanh tiến độ, **băm SHA-256 ngay trong lúc ghi file**
+   (không đọc lại lần hai chỉ để băm).
+4. Băm khớp → mở trình cài đặt của hệ thống. Băm lệch → xoá file, báo thẳng là
+   thứ nhận được không phải bản đã phát hành, **không tự thử lại** — thử lại chỉ
+   che mất chuyện đó.
+5. Gạt thẻ đi rồi thì còn chấm đỏ trên tab Cài đặt. Không có nó thì "để sau"
+   thành "không bao giờ".
+
+#### Không có chuyện tự cài im lặng
+
+Android không cho app thường cài app khác mà không hỏi. Chỉ chủ sở hữu thiết bị
+hoặc app ký bằng khoá hệ thống mới làm được. Thứ làm được là chuẩn bị sẵn file
+rồi mở đúng màn xác nhận của hệ thống — còn lại một cú bấm. Trong mã và trong
+giao diện gọi đúng tên việc đó là *mời cài*, không phải *tự cài*.
+
+Hai chỗ dễ vấp phía Android:
+
+- Gửi thẳng `file://` qua Intent thì từ Android 7.0 hệ thống ném
+  `FileUriExposedException`. Phải đi qua `FileProvider`, khai báo phạm vi hẹp
+  đúng thư mục chứa APK vừa tải.
+- Từ Android 8.0, quyền cài đặt cấp cho **từng app một** chứ không phải một công
+  tắc chung của máy. Chưa được cấp mà cứ gửi Intent thì hệ thống lặng lẽ không
+  làm gì — nhìn hệt như nút hỏng. Nên `MainActivity.kt` kiểm tra
+  `canRequestPackageInstalls()` trước và đưa người dùng thẳng tới màn cấp quyền
+  của chính app này.
+
+#### Phát hành
+
+`version.json` là thứ **duy nhất** quyết định thiết bị có thấy bản mới hay
+không. Phát hành mà quên cập nhật nó thì không máy nào được báo, dù file APK đã
+nằm sẵn trên GitHub. Nên nó được sinh tự động từ chính file vừa dựng:
+
+```bash
+flutter build apk --release --split-per-abi
+dart run tool/prepare_release.dart "Ghi chú phát hành…"
+gh release create v1.0.3 build/release-1.0.3/*.apk --title "Media KIT v1.0.3"
+cp build/release-1.0.3/version.json <repo-công-khai>/docs/ && git -C … push
+```
+
+Chép tay thì chỉ cần một lần quên đổi `sha256`, hoặc đổi `versionName` mà quên
+`versionCode`, là mọi máy hoặc không được báo gì, hoặc tải về rồi bị chặn ở bước
+đối chiếu băm.
 
 ## 12. Trạng thái từng nền tảng
 

@@ -1,0 +1,9 @@
+{
+  "versionCode": 4,
+  "versionName": "1.0.3",
+  "releasedAt": "2026-08-03",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.3/MediaKIT-1.0.3-arm64-v8a.apk",
+  "sizeBytes": 33919736,
+  "sha256": "448a702a8a96897b805e9ebc3327ab72944b52df20d5c5f5eafc0f96066295ac",
+  "notes": "Cập nhật ngay trong app. Trước đây phải tự vào màn Giới thiệu bấm kiểm tra, và đo trên thực tế thì không ai bấm — máy chạy 1.0.1 nằm im dù 1.0.2 đã phát hành. Giờ app tự hỏi lúc mở, nhiều nhất mỗi ngày một lần, có bản mới thì hiện thẻ kèm ghi chú phát hành, tải nền và đối chiếu SHA-256 trước khi mở trình cài đặt. Băm lệch thì xoá file và nói thẳng, không tự thử lại."
+}
