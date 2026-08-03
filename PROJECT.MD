@@ -771,3 +771,55 @@ Những thứ **chưa** kiểm được và cần làm khi có máy Mac: `pod in
 lọt với hai plugin ML Kit không, ảnh lưu ra có vào đúng thư viện ảnh không (iOS bỏ
 qua tham số `relativePath` nên ảnh vào Recents chứ không vào album riêng), và
 luồng OAuth cloud có quay lại app đúng không.
+
+## 13. Quy tắc về ảnh chụp màn hình
+
+Ảnh chụp màn hình đưa ra bất kỳ nơi công khai nào — README, trang phát hành, bài
+giới thiệu — **không được chứa ảnh thật của bất kỳ ai**, kể cả của chính tác giả.
+Lý do đơn giản: đăng lên Internet là không thu hồi được, và người trong ảnh
+thường không có mặt lúc quyết định đăng.
+
+Ba cách xử lý, theo thứ tự ưu tiên:
+
+1. **Chụp những màn không có ảnh nào** — trường bong bóng ở màn Dọn dẹp, màn Giới
+   thiệu, màn Cài đặt. Đủ để giới thiệu phần lớn app.
+2. **Dựng thư viện ảnh minh hoạ rồi cho app chạy thật trên đó.** Đây là cách duy
+   nhất khoe được các màn chi tiết nhóm, gợi ý bố cục và chấm điểm — vì chúng
+   toàn là ảnh. Script `tool/generate_demo_photos.dart` sinh sẵn một bộ có đủ
+   thứ để mọi tính năng đều có cái mà bắt: cụm ảnh gần giống nhau, bản sao y
+   hệt, ảnh mờ, đường chân trời nghiêng, chủ thể đặt lệch.
+
+   **Chạy trên máy ảo, không phải máy thật.** Đẩy ảnh minh hoạ vào máy thật thì
+   chúng chỉ *thêm vào* thư viện chứ không thay thế: mở màn chi tiết nhóm ra
+   vẫn là ảnh thật xếp trước, vì nhóm sắp theo dung lượng chứ không theo ngày.
+   Máy ảo mới trắng thư viện, và đó là điều kiện duy nhất chụp được an toàn.
+3. **Che kín** — chỉ dùng khi hai cách trên không được. Làm mờ thường vẫn để lộ
+   dáng người và bối cảnh, nên phải che hẳn chứ không làm mờ.
+
+Dựng bộ ảnh minh hoạ và đưa lên máy ảo:
+
+```bash
+dart run tool/generate_demo_photos.dart build/demo-photos
+emulator -avd Pixel_6_Pro -no-snapshot-load
+adb -s emulator-5554 shell mkdir -p /sdcard/Pictures/MediaKitDemo
+adb -s emulator-5554 push build/demo-photos/. /sdcard/Pictures/MediaKitDemo/
+
+# Từng file một, KHÔNG dùng scan_volume — xem giải thích bên dưới.
+for f in build/demo-photos/*.jpg; do
+  adb -s emulator-5554 shell content call \
+    --uri content://media/external/images/media \
+    --method scan_file --arg /sdcard/Pictures/MediaKitDemo/$(basename "$f")
+done
+```
+
+`adb push` tạo hàng trong MediaStore với `is_pending=1` và `width`/`height` bằng
+NULL — tức là file đã nằm đó nhưng chưa ai đọc nội dung. `photo_manager` lọc bỏ
+hàng đang pending, nên app quét ra đúng số ảnh cũ và trông y như push hỏng.
+`scan_volume` **không** gỡ trạng thái này (nó chỉ dò file mới); phải gọi
+`scan_file` cho từng đường dẫn thì MediaStore mới thực sự mở file, điền kích
+thước và bỏ cờ pending. Kiểm tra bằng:
+
+```bash
+adb shell content query --uri content://media/external/images/media \
+  --projection is_pending --where "_data LIKE '%MediaKitDemo%'"
+```

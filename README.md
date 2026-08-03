@@ -12,7 +12,10 @@ Toàn bộ phân tích chạy trên máy bạn — không ảnh nào rời khỏ
 Kích thước hình tròn tỉ lệ với dung lượng — nhìn là biết dung lượng đang nằm ở
 nhóm nào.
 
-> Ảnh chụp màn hình cố ý chỉ lấy những màn không có ảnh cá nhân nào.
+> Ảnh chụp màn hình cố ý chỉ lấy những màn không có ảnh cá nhân nào — kể cả của
+> chính tác giả. Các màn chi tiết nhóm, chấm điểm và gợi ý bố cục sẽ được bổ
+> sung sau, chụp trên một thư viện ảnh minh hoạ dựng riêng chứ không phải ảnh
+> thật.
 
 
 ## Media KIT giải quyết chuyện gì
