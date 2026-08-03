@@ -737,9 +737,14 @@ Bản đầu chỉ kiểm tra **khi người dùng tự bấm**. Về nguyên t�
 phát hành, vì chẳng có gì báo cho biết mà bấm. Không ai vào màn Giới thiệu để
 kiểm tra cập nhật.
 
-Nên đổi thành **tự hỏi, nhưng hỏi thưa và hỏi lặng**: chỉ hỏi lúc mở app, nhiều
-nhất mỗi ngày một lần, không thông báo hệ thống, không tác vụ nền, không xin
-thêm quyền chạy nền nào. Câu "chỉ chạm mạng khi bạn tự bấm" trong README và màn
+Nên đổi thành **tự hỏi, nhưng hỏi lặng**: chỉ hỏi lúc mở app, không thông báo hệ
+thống, không tác vụ nền, không xin thêm quyền chạy nền nào.
+
+Khoảng chờ giữa hai lần hỏi lúc đầu để một ngày, với lý do "khỏi gọi mạng mỗi
+lần mở app". Dùng thật mới thấy sai hướng: phát hành một bản vá buổi sáng thì
+máy đã hỏi hôm đó nằm im tới hôm sau, kể cả khi người dùng mở app năm lần. Mà
+thứ gọi đi chỉ là một file JSON vài trăm byte trên CDN. Rút xuống nửa giờ —
+thực tế là mỗi lần mở app đều hỏi, chỉ trừ trường hợp thoát ra vào lại liên tục. Câu "chỉ chạm mạng khi bạn tự bấm" trong README và màn
 Giới thiệu đã được sửa lại cho đúng thay vì để nguyên — nói sai về việc mình
 chạm mạng lúc nào thì tệ hơn hẳn việc chạm mạng.
 
@@ -775,7 +780,7 @@ không phải đoán ý nghĩa của hậu tố `-beta`.
 
 #### Luồng
 
-1. Mở app → nếu quá một ngày kể từ lần hỏi trước thì đọc `version.json`.
+1. Mở app → nếu quá nửa giờ kể từ lần hỏi trước thì đọc `version.json`.
 2. Có bản mới → hiện tấm thẻ trượt lên, kèm **nguyên văn `notes`**. Gạt đi thì
    nhớ đúng bản đó và không hỏi lại; bản mới hơn nữa vẫn hiện.
 3. Bấm tải → tải nền, có thanh tiến độ, **băm SHA-256 ngay trong lúc ghi file**

@@ -48,8 +48,8 @@ Media KIT làm đúng hai việc đó:
 2. **Không bao giờ ghi đè ảnh gốc.** Mỗi lần chỉnh sửa ghi ra một file mới trong
    album riêng, đóng dấu để tra ngược về ảnh gốc.
 3. **Không gửi ảnh đi đâu.** App chạm mạng đúng một việc: đọc một file JSON nhỏ
-   ghi phiên bản mới nhất — nhiều nhất mỗi ngày một lần — và tải bản cập nhật
-   khi bạn đồng ý. Không có gì về thư viện ảnh đi kèm request đó.
+   ghi phiên bản mới nhất mỗi lần bạn mở app, và tải bản cập nhật khi bạn đồng
+   ý. Không có gì về thư viện ảnh đi kèm request đó.
 
 ## Tính năng
 
