@@ -77,7 +77,7 @@ Media KIT làm đúng hai việc đó:
 |---|---|---|
 | Android 7.0+ | Đầy đủ | Cần API 24 trở lên do ML Kit |
 | Windows | Đầy đủ trừ phần khuôn mặt và phân vùng chủ thể | Đọc ảnh từ một thư mục, thường là bản xuất Google Takeout |
-| iOS | Dựng được, chưa kiểm trên máy thật | Không có phân vùng chủ thể (ML Kit chưa hỗ trợ) |
+| iOS 15.5+ | **Chưa dựng thử lần nào** | Cấu hình đã rà nhưng cần macOS + Xcode mới dựng được. Không có phân vùng chủ thể — ML Kit chưa hỗ trợ iOS |
 
 ## Số liệu đo trên máy thật
 

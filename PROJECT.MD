@@ -745,3 +745,29 @@ dùng luôn thấy rõ mình đang tải gì.
 
 Repo chưa có bản phát hành nào thì GitHub trả 404; coi đó là "đang dùng bản mới
 nhất" chứ không phải lỗi.
+
+## 12. Trạng thái từng nền tảng
+
+| Nền tảng | Đã kiểm tới đâu |
+|---|---|
+| Android | Chạy và đo trên Pixel 6 Pro thật, mọi tính năng |
+| Windows | Dựng và chạy được; đã đo lượt quét trên thư viện 4.000 ảnh |
+| iOS | **Chưa dựng thử lần nào** |
+
+Về iOS: không có macOS thì `flutter build ios` không chạy được, nên phần này chưa
+có bằng chứng nào ngoài việc mã biên dịch qua `flutter analyze`. Cái đã làm được
+là rà cấu hình để lần dựng đầu tiên không vỡ ngay ở bước chuẩn bị:
+
+- `IPHONEOS_DEPLOYMENT_TARGET` nâng từ 12.0 lên **15.5**, và thêm `ios/Podfile`
+  đặt `platform :ios, '15.5'`. ML Kit Face Detection đòi 15.5; để mặc định 12.0
+  thì `pod install` gãy ngay, và hai con số này lệch nhau cũng gãy.
+- `NSPhotoLibraryUsageDescription` và `NSPhotoLibraryAddUsageDescription` đã có.
+- `PRODUCT_BUNDLE_IDENTIFIER` đã đổi theo định danh mới.
+- Phân vùng chủ thể không có trên iOS. `SubjectSegmenterService.isSupported` chỉ
+  đúng trên Android nên nó không bao giờ được gọi; bản thân plugin cũng chỉ có
+  lớp rỗng ở phía iOS.
+
+Những thứ **chưa** kiểm được và cần làm khi có máy Mac: `pod install` có chạy trót
+lọt với hai plugin ML Kit không, ảnh lưu ra có vào đúng thư viện ảnh không (iOS bỏ
+qua tham số `relativePath` nên ảnh vào Recents chứ không vào album riêng), và
+luồng OAuth cloud có quay lại app đúng không.
