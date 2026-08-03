@@ -898,3 +898,21 @@ thước và bỏ cờ pending. Kiểm tra bằng:
 adb shell content query --uri content://media/external/images/media \
   --projection is_pending --where "_data LIKE '%MediaKitDemo%'"
 ```
+
+### 13.1 Đừng chạm mù trên máy thật
+
+Ngày 3–4/8/2026 tôi thử giao diện chọn ảnh bằng cách gửi hàng loạt
+`adb shell input tap <x> <y>` theo toạ độ đoán từ ảnh chụp màn hình trước đó.
+Bố cục thật lệch so với dự đoán, nên vài cú chạm rơi vào luồng xoá và **7 ảnh
+thật của người dùng bị chuyển vào thùng rác**. Phát hiện được nhờ số ảnh tụt
+259 → 252 khi đang kiểm một con số khác. Khôi phục đủ cả 7 vì thùng rác giữ
+30 ngày.
+
+Chạm theo toạ độ cố định là thao tác mù: không có gì bảo đảm nút nằm đúng chỗ
+mình tưởng, mà ở màn dọn dẹp thì nút nằm sai chỗ đồng nghĩa với xoá ảnh của
+người ta.
+
+**Mọi thử nghiệm có tương tác — chọn, xoá, kéo thả — làm trên máy ảo.** Máy thật
+chỉ dùng để cài APK, chụp màn hình đọc, và các thao tác đọc thuần. Nếu buộc phải
+chạm trên máy thật thì chụp màn hình ngay trước mỗi cú chạm và xác nhận toạ độ,
+không chuỗi nhiều cú chạm liên tiếp.

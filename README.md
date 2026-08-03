@@ -7,18 +7,23 @@ Toàn bộ phân tích chạy trên máy bạn — không ảnh nào rời khỏ
 
 ---
 
-| Dọn dẹp | Giới thiệu | Cài đặt |
+| Dọn dẹp | Ảnh tương tự | Xem từng tấm |
 |---|---|---|
-| <img src="docs/screenshots/01-home.png" width="240"> | <img src="docs/screenshots/02-about.png" width="240"> | <img src="docs/screenshots/03-settings.png" width="240"> |
+| <img src="docs/screenshots/01-home.png" width="220"> | <img src="docs/screenshots/04-similar.png" width="220"> | <img src="docs/screenshots/07-viewer.png" width="220"> |
+
+| Chấm điểm | Gợi ý bố cục | Thùng rác |
+|---|---|---|
+| <img src="docs/screenshots/05-suggest.png" width="220"> | <img src="docs/screenshots/06-compose.png" width="220"> | <img src="docs/screenshots/08-trash.png" width="220"> |
 
 Kích thước hình tròn tỉ lệ với dung lượng — nhìn là biết dung lượng đang nằm ở
-nhóm nào.
+nhóm nào. Ở thùng rác, vạch dưới mỗi ảnh vơi dần theo thời hạn 30 ngày.
 
-> Ảnh chụp màn hình cố ý chỉ lấy những màn không có ảnh cá nhân nào — kể cả của
-> chính tác giả. Các màn chi tiết nhóm, chấm điểm và gợi ý bố cục sẽ được bổ
-> sung sau, chụp trên một thư viện ảnh minh hoạ dựng riêng chứ không phải ảnh
-> thật.
-
+> **Ảnh trong máy là ảnh minh hoạ tự sinh, không phải ảnh của ai cả.** Ảnh chụp
+> màn hình đưa lên nơi công khai không được chứa ảnh thật của bất kỳ ai, kể cả
+> của tác giả — nên thư viện dùng để chụp được dựng bằng
+> [`tool/generate_demo_photos.dart`](https://github.com/mittohoa/media-kit),
+> cố ý có sẵn ảnh trùng, ảnh gần giống nhau, ảnh mờ và chân trời nghiêng để mọi
+> tính năng đều có cái mà bắt.
 
 ## Media KIT giải quyết chuyện gì
 
@@ -42,8 +47,9 @@ Media KIT làm đúng hai việc đó:
    trong thùng rác 30 ngày.
 2. **Không bao giờ ghi đè ảnh gốc.** Mỗi lần chỉnh sửa ghi ra một file mới trong
    album riêng, đóng dấu để tra ngược về ảnh gốc.
-3. **Không gửi ảnh đi đâu.** App chạm mạng đúng một việc: kiểm tra bản cập nhật,
-   và chỉ khi bạn tự bấm. Ngắt mạng rồi dùng thử là kiểm chứng được.
+3. **Không gửi ảnh đi đâu.** App chạm mạng đúng một việc: đọc một file JSON nhỏ
+   ghi phiên bản mới nhất — nhiều nhất mỗi ngày một lần — và tải bản cập nhật
+   khi bạn đồng ý. Không có gì về thư viện ảnh đi kèm request đó.
 
 ## Tính năng
 
@@ -109,7 +115,8 @@ Windows, thư viện dựng sẵn 4.000 ảnh (7 GB):
 2. Mở file vừa tải, Android sẽ hỏi có cho phép cài từ nguồn này không — đồng ý.
 3. Mở app và cấp quyền truy cập ảnh.
 
-App có sẵn nút **Kiểm tra bản cập nhật** trong màn Giới thiệu.
+Cài xong thì không cần quay lại đây: app tự hỏi bản mới khi mở, và mời cập nhật
+ngay trong app — tải nền, đối chiếu SHA-256, rồi mở trình cài đặt.
 
 > Mã nguồn nằm ở kho riêng. Repo này chứa tài liệu và các bản phát hành.
 
