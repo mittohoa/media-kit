@@ -1,9 +1,9 @@
 {
-  "versionCode": 5,
-  "versionName": "1.0.4",
-  "releasedAt": "2026-08-03",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.4/MediaKIT-1.0.4-arm64-v8a.apk",
+  "versionCode": 6,
+  "versionName": "1.0.5",
+  "releasedAt": "2026-08-04",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.5/MediaKIT-1.0.5-arm64-v8a.apk",
   "sizeBytes": 33919688,
-  "sha256": "bd46629818396a6fb87b9d3cb02b260d2e95e307e973360c8e8b722bea49360d",
-  "notes": "Thao tác chọn ảnh giờ giống bộ sưu tập ảnh của máy: chạm một cái là mở ảnh to, nhấn giữ là vào chế độ chọn, và giữ nguyên ngón tay vuốt tiếp là quét chọn cả dải. Đang chọn thì có nút X để thoát, không phải lùi ra màn trước rồi vào lại. Nút kính lúp trên từng ô bỏ hẳn, lưới nhẹ hẳn đi. Màn xem ảnh to có thêm dải ảnh nhỏ chạy ngang, tự trôi theo tấm đang xem và chạm được để nhảy tới. Thùng rác dựng lại thành lưới ảnh: trước đây chỉ có tên file nên không cách gì biết mình sắp khôi phục hay xoá hẳn cái gì. Mỗi ô có vạch thời hạn vơi dần, vàng từ một tuần cuối và đỏ từ ba ngày cuối, tấm sắp hết hạn xếp lên trước. Khôi phục và xoá vĩnh viễn làm hàng loạt được. Ảnh giữ lại của mỗi nhóm giờ đổi được bằng nút Giữ ảnh này trong màn xem to, và cũng tick xoá được như mọi ảnh khác nếu muốn bỏ cả nhóm."
+  "sha256": "77f4adb213acdc5a33ed5ee22c68f62d30d7e75376974d81df72d0cdffb73d52",
+  "notes": "Sửa hai chỗ khó nhìn ở màn xem ảnh. Lớp nền tối trước đây chỉ bắt đầu từ khối chữ, nên dải ảnh nhỏ và tên file nổi trần trên ảnh — gặp ảnh nền sáng như mặt bàn gỗ hay tường trắng là chữ trắng biến mất hẳn. Thanh trên cũng vậy, số thứ tự và nút chìm luôn vào ảnh. Giờ cả hai đầu đều có nền chuyển màu riêng, số thứ tự nằm trong một viên nền mờ và các nút thành nút tròn nền mờ. Cụm dưới cũng thu gọn: tên file, kích thước và dung lượng gộp về một dòng thay vì ba, hai nút to đổi thành biểu tượng nhỏ có nhãn. Ở màn xem ảnh thì mọi pixel dành cho khung nút là pixel lấy mất của ảnh, mà ảnh mới là thứ cần nhìn để quyết định."
 }
