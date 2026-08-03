@@ -1,9 +1,9 @@
 {
-  "versionCode": 4,
-  "versionName": "1.0.3",
+  "versionCode": 5,
+  "versionName": "1.0.4",
   "releasedAt": "2026-08-03",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.3/MediaKIT-1.0.3-arm64-v8a.apk",
-  "sizeBytes": 33919736,
-  "sha256": "448a702a8a96897b805e9ebc3327ab72944b52df20d5c5f5eafc0f96066295ac",
-  "notes": "Cập nhật ngay trong app. Trước đây phải tự vào màn Giới thiệu bấm kiểm tra, và đo trên thực tế thì không ai bấm — máy chạy 1.0.1 nằm im dù 1.0.2 đã phát hành. Giờ app tự hỏi lúc mở, nhiều nhất mỗi ngày một lần, có bản mới thì hiện thẻ kèm ghi chú phát hành, tải nền và đối chiếu SHA-256 trước khi mở trình cài đặt. Băm lệch thì xoá file và nói thẳng, không tự thử lại."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.4/MediaKIT-1.0.4-arm64-v8a.apk",
+  "sizeBytes": 33919688,
+  "sha256": "bd46629818396a6fb87b9d3cb02b260d2e95e307e973360c8e8b722bea49360d",
+  "notes": "Thao tác chọn ảnh giờ giống bộ sưu tập ảnh của máy: chạm một cái là mở ảnh to, nhấn giữ là vào chế độ chọn, và giữ nguyên ngón tay vuốt tiếp là quét chọn cả dải. Đang chọn thì có nút X để thoát, không phải lùi ra màn trước rồi vào lại. Nút kính lúp trên từng ô bỏ hẳn, lưới nhẹ hẳn đi. Màn xem ảnh to có thêm dải ảnh nhỏ chạy ngang, tự trôi theo tấm đang xem và chạm được để nhảy tới. Thùng rác dựng lại thành lưới ảnh: trước đây chỉ có tên file nên không cách gì biết mình sắp khôi phục hay xoá hẳn cái gì. Mỗi ô có vạch thời hạn vơi dần, vàng từ một tuần cuối và đỏ từ ba ngày cuối, tấm sắp hết hạn xếp lên trước. Khôi phục và xoá vĩnh viễn làm hàng loạt được. Ảnh giữ lại của mỗi nhóm giờ đổi được bằng nút Giữ ảnh này trong màn xem to, và cũng tick xoá được như mọi ảnh khác nếu muốn bỏ cả nhóm."
 }
