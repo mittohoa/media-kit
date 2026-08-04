@@ -1,9 +1,9 @@
 {
-  "versionCode": 16,
-  "versionName": "1.0.15",
-  "releasedAt": "2026-08-04",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.15/MediaKIT-1.0.15-arm64-v8a.apk",
-  "sizeBytes": 34117064,
-  "sha256": "927ba9acba45c2008479177c0b9ece6f4c8926dcea7dd56f20fcfc2f516c3f29",
-  "notes": "Sửa lỗi bản 1.0.14 gây ra: bấm Quét lại không có gì xảy ra. Một con số trong bộ lọc gửi xuống thư viện vượt giới hạn 32 bit, làm lượt quét hỏng ngay từ bước đầu. Kèm theo, app giờ hiện hẳn lý do khi quét thất bại — trước đây lỗi quét hoàn toàn im lặng, nên một trục trặc ở bước đầu trông y hệt một cái nút chết."
+  "versionCode": 17,
+  "versionName": "1.0.16",
+  "releasedAt": "2026-08-05",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.16/MediaKIT-1.0.16-arm64-v8a.apk",
+  "sizeBytes": 34117708,
+  "sha256": "928613e8f160e7a26401b9f6e630fb02a230e98f4597a546f0c553646435098e",
+  "notes": "Sửa lỗi video không hiện ra. Trên máy đã từng chọn kiểu cấp quyền 'chỉ chọn một số mục', app không bao giờ xin quyền đọc video — nó tưởng mình đã đủ quyền, đọc ảnh bình thường và thấy đúng 0 video. Giờ app tự xin phần video. Sau khi cập nhật, màn hình chính sẽ mời bấm Quét lại, và nếu máy hỏi quyền thì hãy chọn Cho phép tất cả chứ đừng chọn từng mục. Kèm theo: bước quét nhanh hơn hẳn khi thư viện không đổi, bước xem video có thanh tiến độ riêng và giới hạn thời gian, ba mục dọn dẹp mới cho video (nặng nhất, quá dài, chất lượng thấp), nút Phát khi mở video, và mục 'App đang thấy gì' trong Cài đặt để dò lỗi."
 }
