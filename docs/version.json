@@ -1,9 +1,9 @@
 {
-  "versionCode": 13,
-  "versionName": "1.0.12",
+  "versionCode": 14,
+  "versionName": "1.0.13",
   "releasedAt": "2026-08-04",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.12/MediaKIT-1.0.12-arm64-v8a.apk",
-  "sizeBytes": 33985760,
-  "sha256": "3039fcb83fafc4ad9d0b976efaadfc92bcfd696b8193c778a18df8b174ed712e",
-  "notes": "Tìm được cả video trùng đã bị nén lại. Một clip gửi qua Zalo hay Messenger vài lần thì mỗi bản khác hẳn nhau về dung lượng, nên bản trước không nhận ra được — giờ app so vài khung hình lấy ở cùng vị trí trong clip và ghép chúng lại thành một mục riêng. Cả ba mục video (Video trùng, Video trùng nội dung, Clip lỡ tay) đều không tự tick sẵn: video thường nặng hàng trăm MB và không có bản nào khác ở đâu, nên bạn tự chọn."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.13/MediaKIT-1.0.13-arm64-v8a.apk",
+  "sizeBytes": 34116912,
+  "sha256": "5e1ef3af83bfa9d55fc9d87923ca8dcbca8c5bf9ba1009507ba56aa85adbf36b",
+  "notes": "Quét thêm được một thư mục bạn tự chỉ. Vào Cài đặt > Thêm một thư mục rồi chọn Download hay thư mục của ứng dụng nhắn tin — app quét nó cùng lúc với thư viện ảnh, nên tìm được cả những tấm nằm ở cả hai nơi. App chỉ thấy đúng thư mục bạn chỉ, không xin quyền đọc toàn bộ bộ nhớ. Bỏ thư mục lúc nào cũng được, app trả quyền lại cho hệ thống."
 }
