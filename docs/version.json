@@ -1,9 +1,9 @@
 {
-  "versionCode": 8,
-  "versionName": "1.0.7",
+  "versionCode": 9,
+  "versionName": "1.0.8",
   "releasedAt": "2026-08-04",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.7/MediaKIT-1.0.7-arm64-v8a.apk",
-  "sizeBytes": 33919688,
-  "sha256": "c717c318e572faea6cbce6c1ec0c21ab29c4305df6f77b375804fe62296778f8",
-  "notes": "Phân tích bố cục tự chạy sau khi quét. Trước đây tab Gợi ý trống trơn cho tới khi bạn tự tìm ra nút Phân tích bố cục rồi ngồi chờ khoảng 90 giây — nửa hay nhất của app nằm sau một cái nút mà không có gì thúc người ta bấm. Giờ quét xong là chạy tiếp ngay, và chạy nốt phần còn dở khi mở app lần sau. Dừng được bất cứ lúc nào, và lần sau tiếp tục từ chỗ dở. Kèm một lỗi âm thầm phải bịt trước khi dám cho nó tự chạy: ảnh không đọc được (mất quyền, rút thẻ nhớ, file đang ghi dở) trước đây bị đóng dấu đã kiểm y như ảnh chụp màn hình, nên một trục trặc vài giây đủ để đánh dấu sạch cả thư viện và mục Gợi ý im vĩnh viễn mà không báo lỗi nào. App cũng báo có bản mới nhanh hơn: trước đây nhiều nhất mỗi ngày hỏi một lần, nên phát hành buổi sáng thì máy đã hỏi hôm đó nằm im tới hôm sau. Giờ mỗi lần mở app đều hỏi."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.8/MediaKIT-1.0.8-arm64-v8a.apk",
+  "sizeBytes": 33985224,
+  "sha256": "075901fee00399f33fdb87fd3b2a955acd13dd0c6cf9362c293541d2928af1ce",
+  "notes": "Thùng rác nhẹ hơn hẳn: từ Android 11, ảnh đưa vào thùng rác không còn bị chép thêm một bản, nên không tốn thêm dung lượng và không còn giới hạn cỡ file."
 }
