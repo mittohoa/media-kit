@@ -1,9 +1,9 @@
 {
-  "versionCode": 14,
-  "versionName": "1.0.13",
+  "versionCode": 15,
+  "versionName": "1.0.14",
   "releasedAt": "2026-08-04",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.13/MediaKIT-1.0.13-arm64-v8a.apk",
-  "sizeBytes": 34116912,
-  "sha256": "5e1ef3af83bfa9d55fc9d87923ca8dcbca8c5bf9ba1009507ba56aa85adbf36b",
-  "notes": "Quét thêm được một thư mục bạn tự chỉ. Vào Cài đặt > Thêm một thư mục rồi chọn Download hay thư mục của ứng dụng nhắn tin — app quét nó cùng lúc với thư viện ảnh, nên tìm được cả những tấm nằm ở cả hai nơi. App chỉ thấy đúng thư mục bạn chỉ, không xin quyền đọc toàn bộ bộ nhớ. Bỏ thư mục lúc nào cũng được, app trả quyền lại cho hệ thống."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.14/MediaKIT-1.0.14-arm64-v8a.apk",
+  "sizeBytes": 34117020,
+  "sha256": "ede9313211eb63ff8c276d70dac356f0381f4431f36de89a5df7cc3c1b72ee1a",
+  "notes": "Sửa lỗi: video không hiện ra dù ba bản trước nói là đã quét được. Bộ lọc gửi xuống thư viện của máy đòi video phải khai đủ kích thước và thời lượng, mà rất nhiều video không khai — file tải về, file nhận qua ứng dụng nhắn tin — nên chúng bị loại khỏi kết quả mà không có lỗi nào báo ra. Sau khi cập nhật, màn hình chính sẽ mời bạn bấm Quét lại: chỉ mục cũ được dựng bởi bản chưa biết video nên không tự có chúng."
 }
