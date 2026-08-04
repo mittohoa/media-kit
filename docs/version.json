@@ -1,9 +1,9 @@
 {
-  "versionCode": 18,
-  "versionName": "1.0.17",
+  "versionCode": 19,
+  "versionName": "1.0.18",
   "releasedAt": "2026-08-05",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.17/MediaKIT-1.0.17-arm64-v8a.apk",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.18/MediaKIT-1.0.18-arm64-v8a.apk",
   "sizeBytes": 34183504,
-  "sha256": "b01a6cf171e1fbbb0a1db87d94c0d81971b0f5d7ce6e8c42bb4bc67d12677b3d",
-  "notes": "Cắt và tách video ngay trong app. Mở một video rồi bấm nút Cắt: kéo hai đầu để chọn đoạn muốn giữ, hoặc tách video làm hai. Cắt không mã hoá lại nên chỉ mất vài giây kể cả với video 1 GB, và chất lượng giữ nguyên từng khung. Hai điều nên biết: điểm bắt đầu sẽ lùi về khung hình gốc gần nhất (thường sớm hơn dưới hai giây, đó là cái giá của việc cắt nhanh và không mất chất lượng), và bản gốc được giữ nguyên nên dung lượng sẽ tăng cho tới khi bạn tự xoá nó. Phần này chưa chạy trên máy thật lần nào."
+  "sha256": "ce7e50613392717b04d6b772d656a69287feefa288259c85c4f29c926fc83cf9",
+  "notes": "Sửa lỗi bản 1.0.17: cắt video xong nhưng video mới không xuất hiện ở đâu cả. App cắt đúng và ghi ra file sạch sẽ, nhưng lại lưu theo đường dành cho ảnh nên hệ thống không nhận. Giờ video cắt xong nằm trong album Media KIT. Đã kiểm trên máy thật: giữ nguyên tiếng, giữ nguyên chiều dọc/ngang, và tách làm hai cũng chạy đúng."
 }
