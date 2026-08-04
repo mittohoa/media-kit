@@ -930,20 +930,72 @@ không chuỗi nhiều cú chạm liên tiếp.
 Ghi lại vào lúc phát hành v1.0.7. Mỗi mục kèm chỗ đã kiểm được trong mã, để lần
 sau khỏi phải dò lại từ đầu.
 
-### 14.1 App không nhìn thấy video
+### 14.1 Hai nhánh chưa có hướng: video và file khác
 
-`device_media_source.dart` chỉ hỏi `RequestType.image`, nên toàn bộ video nằm
-ngoài tầm mắt của app.
-
+App hiện chỉ nhìn thấy ảnh (`device_media_source.dart` hỏi `RequestType.image`).
 Đây là khoảng cách lớn nhất giữa lời hứa và thứ app thực sự làm: khẩu hiệu là
 **giải phóng dung lượng**, mà trên điện thoại thật video gần như luôn chiếm phần
 lớn. Đo trên máy thật 259 ảnh: app báo giải phóng được 146 MB, trong khi thư mục
 video của cùng máy đó có thể đang giữ vài GB.
 
-Chưa cần dựng cả bộ phân tích cho video. Chỉ **video trùng** (đối chiếu MD5, đã
-có sẵn) và **video lớn hoặc dài** đã đủ đổi hẳn con số ở màn chính. Phần chấm
-điểm và bố cục thì không áp dụng được, nên chúng phải bị loại khỏi mục tiêu B
-giống cách ảnh chụp màn hình đang bị loại.
+#### Chặn cứng: thùng rác hiện tại không dùng được cho video
+
+`TrashService.moveToTrash` gọi `originalBytes()` — **nạp trọn file vào RAM** rồi
+ghi ra một bản sao, xong mới xoá bản gốc. Với ảnh 3 MB thì không sao. Với video
+1 GB thì hai chuyện xảy ra:
+
+- nạp 1 GB vào RAM là văng app, chắc chắn chứ không phải "có thể";
+- kể cả stream được thì nó vẫn **nhân đôi dung lượng tạm thời** — trên đúng cái
+  máy mà người ta đang dọn *vì nó đầy*. Càng cần dọn thì càng không dọn được.
+
+Nên nhánh video không bắt đầu bằng "thêm video vào danh sách quét" mà bằng đổi
+cách thùng rác giữ file: **chuyển (rename) thay vì sao chép**, hoặc dùng thẳng
+thùng rác của hệ thống (`MediaStore.createTrashRequest`, Android 11+) — nó giữ
+30 ngày mà không tốn thêm byte nào. Chưa xong chỗ này thì mọi thứ khác đều xây
+trên nền lún.
+
+#### Video khác ảnh ở ba chỗ
+
+**Đọc file đắt gấp hàng trăm lần.** MD5 một video 1 GB mất vài giây; vài chục
+video là vài phút. Không thể băm hết. Lọc thô bằng **(dung lượng, thời lượng)**
+trước — khác cặp số đó thì chắc chắn không trùng — rồi mới băm những cặp còn
+đụng nhau. Đây cũng chính là cách `content_hash` hiện tại né việc băm mọi ảnh.
+
+**"Tương tự" phải lấy mẫu khung hình.** Rẻ nhất: thumbnail ở giây 0 và giữa
+clip, rồi chạy đúng dHash + BK-tree đã có. Không cần thuật toán mới.
+
+**Mục đáng tiền lại khác ảnh.** Với ảnh là trùng và mờ. Với video:
+
+- **video trùng** — cực phổ biến, một clip chuyển qua ứng dụng nhắn tin vài lần
+  là nằm lại vài bản;
+- **clip lỡ tay** — 1–2 giây, quay nhầm trong túi. Nhận ra chỉ bằng thời lượng,
+  tỉ lệ trúng rất cao;
+- **video dài và nặng đã lâu không mở**.
+
+Chấm điểm và bố cục không áp dụng được cho video, phải loại khỏi mục tiêu B
+giống cách ảnh chụp màn hình đang bị loại (§6.5).
+
+#### File khác: đi đường hẹp, đừng xin quyền toàn bộ bộ nhớ
+
+Vấn đề không phải kỹ thuật mà là **quyền**. Từ Android 11, đọc file bất kỳ cần
+`MANAGE_EXTERNAL_STORAGE` — quyền "Truy cập tất cả file". App này không lên Play
+nên xin được, nhưng nó phá đúng thứ đang là điểm mạnh: một app hứa "chỉ đụng vào
+ảnh của bạn" mà lại xin quyền đọc toàn bộ bộ nhớ thì lời hứa đó không còn ai
+tin, và §8 không còn kiểm chứng được nữa.
+
+Đường hẹp đúng hơn: **để người dùng tự chọn một thư mục** qua bộ chọn của hệ
+thống (SAF, `ACTION_OPEN_DOCUMENT_TREE`). Họ chỉ đường tới `Download` hay thư
+mục của ứng dụng nhắn tin, app chỉ thấy đúng chỗ đó, không quyền nào đáng sợ.
+
+Cái hay là **app đã có sẵn hình dạng này**: `FolderMediaSource` đang phục vụ bản
+Windows chính là "đọc ảnh từ một thư mục do người dùng chỉ" (§6.6). Thêm nhánh
+Android cho nó là mở rộng một trừu tượng đã có, không phải dựng cái mới.
+
+#### Thứ tự đề xuất
+
+1. Sửa thùng rác: chuyển file thay vì sao chép.
+2. Video trùng và clip lỡ tay — hai mục trúng nhiều nhất, dùng lại dHash sẵn có.
+3. Thư mục do người dùng chọn qua SAF, dùng lại `FolderMediaSource`.
 
 ### 14.2 Cảnh báo đồng bộ hiện ở mọi lần xoá nên mất tác dụng
 
