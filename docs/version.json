@@ -1,9 +1,9 @@
 {
-  "versionCode": 10,
-  "versionName": "1.0.9",
+  "versionCode": 11,
+  "versionName": "1.0.10",
   "releasedAt": "2026-08-04",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.9/MediaKIT-1.0.9-arm64-v8a.apk",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.10/MediaKIT-1.0.10-arm64-v8a.apk",
   "sizeBytes": 33985328,
-  "sha256": "90edad2ecebd8e7b7fab4619a143ed1cfb27a641a49a1670d11eb41df4bf0b9f",
-  "notes": "Cảnh báo trước khi xoá giờ chỉ hiện khi máy thật sự có app đồng bộ ảnh (Google Photos, OneDrive, Dropbox). Trước đây nó bật ở mọi lần xoá, kể cả trên máy không đồng bộ gì — cảnh báo lúc nào cũng bật thì không còn ai đọc."
+  "sha256": "cc06ccc63a8e02ac274d1d0091388505ece46453d1cd3a3079df4c7b78fffbec",
+  "notes": "Phân tích bố cục tự chạy giờ dừng lại sau 90 giây mỗi lần mở app, rồi tiếp tục ở lần sau. Với thư viện vài nghìn ảnh trở lên, trước đây nó chạy liên tục hàng giờ ngay sau lần quét đầu — nóng máy và tụt pin mà bạn không hề yêu cầu. Muốn chạy hết một mạch thì bấm nút Phân tích bố cục như cũ."
 }
