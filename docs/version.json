@@ -1,9 +1,9 @@
 {
-  "versionCode": 15,
-  "versionName": "1.0.14",
+  "versionCode": 16,
+  "versionName": "1.0.15",
   "releasedAt": "2026-08-04",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.14/MediaKIT-1.0.14-arm64-v8a.apk",
-  "sizeBytes": 34117020,
-  "sha256": "ede9313211eb63ff8c276d70dac356f0381f4431f36de89a5df7cc3c1b72ee1a",
-  "notes": "Sửa lỗi: video không hiện ra dù ba bản trước nói là đã quét được. Bộ lọc gửi xuống thư viện của máy đòi video phải khai đủ kích thước và thời lượng, mà rất nhiều video không khai — file tải về, file nhận qua ứng dụng nhắn tin — nên chúng bị loại khỏi kết quả mà không có lỗi nào báo ra. Sau khi cập nhật, màn hình chính sẽ mời bạn bấm Quét lại: chỉ mục cũ được dựng bởi bản chưa biết video nên không tự có chúng."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.15/MediaKIT-1.0.15-arm64-v8a.apk",
+  "sizeBytes": 34117064,
+  "sha256": "927ba9acba45c2008479177c0b9ece6f4c8926dcea7dd56f20fcfc2f516c3f29",
+  "notes": "Sửa lỗi bản 1.0.14 gây ra: bấm Quét lại không có gì xảy ra. Một con số trong bộ lọc gửi xuống thư viện vượt giới hạn 32 bit, làm lượt quét hỏng ngay từ bước đầu. Kèm theo, app giờ hiện hẳn lý do khi quét thất bại — trước đây lỗi quét hoàn toàn im lặng, nên một trục trặc ở bước đầu trông y hệt một cái nút chết."
 }
