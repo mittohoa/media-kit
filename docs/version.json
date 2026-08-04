@@ -1,9 +1,9 @@
 {
-  "versionCode": 19,
-  "versionName": "1.0.18",
+  "versionCode": 20,
+  "versionName": "1.0.19",
   "releasedAt": "2026-08-05",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.18/MediaKIT-1.0.18-arm64-v8a.apk",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.19/MediaKIT-1.0.19-arm64-v8a.apk",
   "sizeBytes": 34183504,
-  "sha256": "ce7e50613392717b04d6b772d656a69287feefa288259c85c4f29c926fc83cf9",
-  "notes": "Sửa lỗi bản 1.0.17: cắt video xong nhưng video mới không xuất hiện ở đâu cả. App cắt đúng và ghi ra file sạch sẽ, nhưng lại lưu theo đường dành cho ảnh nên hệ thống không nhận. Giờ video cắt xong nằm trong album Media KIT. Đã kiểm trên máy thật: giữ nguyên tiếng, giữ nguyên chiều dọc/ngang, và tách làm hai cũng chạy đúng."
+  "sha256": "87ef5a4acb9015a5dd33c145c8e944144c7981b5adc9ac42a1bd2e2195a1f555",
+  "notes": "Quét lại nhanh hơn nữa. Trên thư viện 3.586 mục (31,7 GB), một lượt quét lại khi không có gì đổi giờ mất khoảng 6 giây — đầu hôm nay nó mất 102 giây. Bản này cũng gồm bản vá của 1.0.18 nếu bạn chưa cập nhật: video cắt xong vào đúng album Media KIT, giữ nguyên tiếng và chiều dọc."
 }
