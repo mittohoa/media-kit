@@ -1,9 +1,9 @@
 {
-  "versionCode": 12,
-  "versionName": "1.0.11",
+  "versionCode": 13,
+  "versionName": "1.0.12",
   "releasedAt": "2026-08-04",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.11/MediaKIT-1.0.11-arm64-v8a.apk",
-  "sizeBytes": 33985656,
-  "sha256": "29ba3b10a5e7f97fa43cbeab6f1e2884a1a5ffc243834c69da2cc7f79db0fc8d",
-  "notes": "App đã nhìn thấy video. Lần quét giờ đếm cả video, và có hai mục dọn dẹp mới: Video trùng (nhận ra bằng dung lượng, thời lượng và ba đoạn nội dung lấy mẫu — không phải đọc cả file) và Clip lỡ tay (video 1–2 giây quay nhầm trong túi). Video trùng cố ý KHÔNG được tick sẵn: bằng chứng ở đây yếu hơn ảnh trùng một bậc, và mỗi video thường nặng hàng trăm MB. Cần cấp thêm quyền đọc video ở lần mở đầu tiên."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.12/MediaKIT-1.0.12-arm64-v8a.apk",
+  "sizeBytes": 33985760,
+  "sha256": "3039fcb83fafc4ad9d0b976efaadfc92bcfd696b8193c778a18df8b174ed712e",
+  "notes": "Tìm được cả video trùng đã bị nén lại. Một clip gửi qua Zalo hay Messenger vài lần thì mỗi bản khác hẳn nhau về dung lượng, nên bản trước không nhận ra được — giờ app so vài khung hình lấy ở cùng vị trí trong clip và ghép chúng lại thành một mục riêng. Cả ba mục video (Video trùng, Video trùng nội dung, Clip lỡ tay) đều không tự tick sẵn: video thường nặng hàng trăm MB và không có bản nào khác ở đâu, nên bạn tự chọn."
 }
