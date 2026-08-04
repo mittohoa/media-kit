@@ -701,6 +701,9 @@ Song song với Phase 1, cần bắt đầu sớm phần **nghiên cứu cho m�
 chuẩn hoá bộ quy tắc bố cục, thử nghiệm model saliency, và dựng bộ ảnh kiểm thử có gán nhãn tay.
 Đây là phần tốn thời gian nhất và không thể rút ngắn bằng cách code nhanh hơn.
 
+**Tình trạng tại v1.0.7**: Phase 1 và Phase 2 đã xong và đang chạy trên máy thật.
+Những gì còn treo — kể cả vài thứ lẽ ra thuộc Phase 1, như video — nằm ở §14.
+
 ## 11. Màn Giới thiệu trong app
 
 Một app có tính năng nhạy cảm (đọc toàn bộ thư viện ảnh, đề xuất xoá) thì phần
@@ -921,3 +924,59 @@ người ta.
 chỉ dùng để cài APK, chụp màn hình đọc, và các thao tác đọc thuần. Nếu buộc phải
 chạm trên máy thật thì chụp màn hình ngay trước mỗi cú chạm và xác nhận toạ độ,
 không chuỗi nhiều cú chạm liên tiếp.
+
+## 14. Việc còn treo
+
+Ghi lại vào lúc phát hành v1.0.7. Mỗi mục kèm chỗ đã kiểm được trong mã, để lần
+sau khỏi phải dò lại từ đầu.
+
+### 14.1 App không nhìn thấy video
+
+`device_media_source.dart` chỉ hỏi `RequestType.image`, nên toàn bộ video nằm
+ngoài tầm mắt của app.
+
+Đây là khoảng cách lớn nhất giữa lời hứa và thứ app thực sự làm: khẩu hiệu là
+**giải phóng dung lượng**, mà trên điện thoại thật video gần như luôn chiếm phần
+lớn. Đo trên máy thật 259 ảnh: app báo giải phóng được 146 MB, trong khi thư mục
+video của cùng máy đó có thể đang giữ vài GB.
+
+Chưa cần dựng cả bộ phân tích cho video. Chỉ **video trùng** (đối chiếu MD5, đã
+có sẵn) và **video lớn hoặc dài** đã đủ đổi hẳn con số ở màn chính. Phần chấm
+điểm và bố cục thì không áp dụng được, nên chúng phải bị loại khỏi mục tiêu B
+giống cách ảnh chụp màn hình đang bị loại.
+
+### 14.2 Cảnh báo đồng bộ hiện ở mọi lần xoá nên mất tác dụng
+
+`group_detail_screen.dart` hiện khối cảnh báo đỏ khi `backup != backedUp`. Mà
+`BackupStatus.backedUp` chỉ được đặt sau khi đối chiếu với cloud
+(`library_scanner.dart`), và cloud cần client id — chưa cấu hình thì mọi ảnh
+vĩnh viễn ở `unknown`.
+
+Kết quả: hộp đỏ "Xoá ảnh trên máy có thể xoá luôn bản trên cloud" xuất hiện
+trong **từng lần xoá**, kể cả trên máy không bật đồng bộ gì cả. Cảnh báo lúc nào
+cũng bật thì người ta ngừng đọc, và đúng ngày nó thật sự đúng thì không ai để ý.
+Một cảnh báo mất tác dụng còn tệ hơn không có cảnh báo, vì nó tạo cảm giác đã
+được nhắc.
+
+Hai đường ra, chọn một:
+
+- nối cloud để `backedUp` chạy thật, rồi cảnh báo mới có nghĩa; hoặc
+- chỉ cảnh báo khi phát hiện máy đang thật sự bật đồng bộ ảnh.
+
+### 14.3 Tự phân tích bố cục ở thư viện lớn
+
+Từ v1.0.7, phân tích bố cục tự chạy sau khi quét. Đo trên 259 ảnh: khoảng 90
+giây, chấp nhận được.
+
+Chưa đo lần nào ở quy mô thật. Thư viện điện thoại thường 10–30 nghìn ảnh, cùng
+nhịp đó là **một tới ba tiếng** CPU chạy liên tục ngay sau lần quét đầu — máy
+nóng, tụt pin, mà người dùng không hiểu vì sao. Trước v1.0.7 chuyện này không xảy
+ra vì phải tự bấm, tức là người bấm biết mình đang yêu cầu gì.
+
+Cần đo trước, rồi chọn: giới hạn số ảnh mỗi phiên, hoặc chỉ chạy tiếp khi đang
+sạc, hoặc cả hai.
+
+### 14.4 iOS chưa dựng thử lần nào
+
+Xem §12. Cấu hình đã rà (deployment target 15.5, quyền, Podfile) nhưng cần macOS
++ Xcode mới dựng được. Không có đường vòng nào.
