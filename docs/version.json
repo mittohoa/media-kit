@@ -1,9 +1,9 @@
 {
-  "versionCode": 20,
-  "versionName": "1.0.19",
+  "versionCode": 21,
+  "versionName": "1.0.20",
   "releasedAt": "2026-08-05",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.19/MediaKIT-1.0.19-arm64-v8a.apk",
-  "sizeBytes": 34183504,
-  "sha256": "87ef5a4acb9015a5dd33c145c8e944144c7981b5adc9ac42a1bd2e2195a1f555",
-  "notes": "Quét lại nhanh hơn nữa. Trên thư viện 3.586 mục (31,7 GB), một lượt quét lại khi không có gì đổi giờ mất khoảng 6 giây — đầu hôm nay nó mất 102 giây. Bản này cũng gồm bản vá của 1.0.18 nếu bạn chưa cập nhật: video cắt xong vào đúng album Media KIT, giữ nguyên tiếng và chiều dọc."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.20/MediaKIT-1.0.20-arm64-v8a.apk",
+  "sizeBytes": 34315964,
+  "sha256": "ce94e14ee0a36b534d8d108a4bb7e6d32480f8572c041b89815178e98dc8af1d",
+  "notes": "Bản cập nhật lớn nhất từ trước tới nay. Dọn dẹp: 7 mục phân loại mới (video quay màn hình, video qua chat, video cũ và nặng, ảnh tài liệu, ảnh chụp lỡ, file hỏng, ảnh nặng bất thường), nút Bỏ qua không đề xuất lại, và mục 'Bản gốc đã có bản chỉnh' giúp giải phóng ảnh gốc sau khi chỉnh. Chỉnh sửa: thao tác trực tiếp trên ảnh (kéo khung, véo phóng, thước xoay), giữ để so với bản gốc, điểm chấm lại ngay khi chỉnh, dùng lại công thức, nhập LUT .cube, và 29 tông màu dựng sẵn."
 }
