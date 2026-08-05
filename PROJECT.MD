@@ -659,6 +659,9 @@ Nguyên tắc giao diện:
 - Mọi phân tích diễn ra **trên thiết bị**; không có ảnh nào rời khỏi máy.
 - **Không bao giờ xoá tự động.** Mọi thao tác xoá đều do người dùng xác nhận.
 - **Thùng rác 30 ngày** với chức năng khôi phục; hiển thị rõ ảnh sẽ bị xoá vĩnh viễn khi nào.
+  Từ Android 11, ảnh nằm trong thùng rác của **hệ thống** chứ không được app chép đi đâu
+  (§14.1) — hết 30 ngày app thôi theo dõi, còn file thì hệ thống dọn theo hạn của nó và
+  tới lúc đó vẫn khôi phục được từ thùng rác của máy.
 - Cho phép **đánh dấu album/ảnh được bảo vệ**, app không đề xuất xoá chúng.
 - Hỗ trợ đúng mô hình quyền: Android 13+ (`READ_MEDIA_IMAGES`) và iOS **Limited Photo Access**
   — app phải hoạt động được kể cả khi người dùng chỉ cấp quyền một phần.
@@ -833,9 +836,16 @@ Chép tay thì chỉ cần một lần quên đổi `sha256`, hoặc đổi `ver
 
 | Nền tảng | Đã kiểm tới đâu |
 |---|---|
-| Android | Chạy và đo trên Pixel 6 Pro thật, mọi tính năng |
+| Android | Chạy và đo trên Pixel 6 Pro và Galaxy S24 FE thật, mọi tính năng kể cả video |
 | Windows | Dựng và chạy được; đã đo lượt quét trên thư viện 4.000 ảnh |
 | iOS | **Chưa dựng thử lần nào** |
+
+Hai nền tảng đang được nhắm tới là **Android và Windows**; iOS để lại cho đợt
+nâng cấp sau. Việc đó định hình cả những phần mới: video vào chỉ mục được làm
+cho hai nguồn đó (`DeviceMediaSource` qua MediaStore, `FolderMediaSource` qua
+đuôi file), còn phía iOS thì đường đọc thư viện dùng chung `photo_manager` nên
+*về nguyên tắc* chạy được — nhưng chưa ai chạy, và `NSPhotoLibraryUsageDescription`
+mô tả việc đọc ảnh chứ chưa nhắc tới video.
 
 Về iOS: không có macOS thì `flutter build ios` không chạy được, nên phần này chưa
 có bằng chứng nào ngoài việc mã biên dịch qua `flutter analyze`. Cái đã làm được
@@ -932,27 +942,285 @@ sau khỏi phải dò lại từ đầu.
 
 ### 14.1 Hai nhánh chưa có hướng: video và file khác
 
-App hiện chỉ nhìn thấy ảnh (`device_media_source.dart` hỏi `RequestType.image`).
 Đây là khoảng cách lớn nhất giữa lời hứa và thứ app thực sự làm: khẩu hiệu là
 **giải phóng dung lượng**, mà trên điện thoại thật video gần như luôn chiếm phần
 lớn. Đo trên máy thật 259 ảnh: app báo giải phóng được 146 MB, trong khi thư mục
 video của cùng máy đó có thể đang giữ vài GB.
 
-#### Chặn cứng: thùng rác hiện tại không dùng được cho video
+#### Video đã vào chỉ mục — **xong**, và chỉ mới tới đó
 
-`TrashService.moveToTrash` gọi `originalBytes()` — **nạp trọn file vào RAM** rồi
-ghi ra một bản sao, xong mới xoá bản gốc. Với ảnh 3 MB thì không sao. Với video
-1 GB thì hai chuyện xảy ra:
+`RequestType.common` thay cho `RequestType.image`, nguồn thư mục nhận thêm bảy
+đuôi file video, và `PhotoKind.video` (giá trị **cuối** enum — `kind` lưu bằng
+chỉ số, chèn vào giữa là mọi ảnh đã có đổi loại sau khi nâng cấp) đánh dấu chúng
+trong cùng một bảng với ảnh. Cơ sở dữ liệu lên v6 với cột `duration_ms`.
 
-- nạp 1 GB vào RAM là văng app, chắc chắn chứ không phải "có thể";
-- kể cả stream được thì nó vẫn **nhân đôi dung lượng tạm thời** — trên đúng cái
-  máy mà người ta đang dọn *vì nó đầy*. Càng cần dọn thì càng không dọn được.
+Việc khó không nằm ở chỗ nhận chúng vào mà ở chỗ **giữ chúng khỏi mọi đường đã
+xây cho ảnh**. Ba đường đều đọc trọn file vào RAM, và mỗi đường đều đủ để văng
+app ngay giữa lần quét đầu:
 
-Nên nhánh video không bắt đầu bằng "thêm video vào danh sách quét" mà bằng đổi
-cách thùng rác giữ file: **chuyển (rename) thay vì sao chép**, hoặc dùng thẳng
-thùng rác của hệ thống (`MediaStore.createTrashRequest`, Android 11+) — nó giữ
-30 ngày mà không tốn thêm byte nào. Chưa xong chỗ này thì mọi thứ khác đều xây
-trên nền lún.
+- **sinh thumbnail để phân tích** — bỏ hẳn cho video (`_videoRecord`), nên không
+  băm, không đo nét, không đoán giấy tờ. Đằng nào cũng vô nghĩa: dHash của khung
+  hình đầu không nói được hai video có giống nhau không;
+- **băm MD5 cho ứng viên trùng dung lượng** — `sizeCollisionCandidates` loại
+  video ra bằng SQL. Hai video cùng dung lượng là chuyện rất thường;
+- **đọc EXIF** — `needingExif` loại video ra.
+
+Thêm hai chỗ nữa: phân tích bố cục loại video qua `_nonPhotographicKinds` (chấm
+điểm một khung hình tĩnh không nói được gì về video), và `AndroidManifest` phải
+khai `READ_MEDIA_VIDEO` — thiếu nó thì Android 13+ từ chối quyền video **không
+báo gì**, thư viện hiện ra chỉ có ảnh, đúng như thể tính năng chưa được làm.
+
+Vì chưa có băm nào, video không lọt vào nhóm dọn dẹp nào — mọi nhóm chỉ gom
+những dòng *có* băm. Đó là trạng thái đúng cho bước này: app **thấy** và **đếm**
+đúng dung lượng video, còn việc chỉ ra video nào đáng xoá là bước sau.
+
+Nguồn thư mục (bản Windows) để trống thời lượng: muốn biết thì phải giải mã file.
+`null` ở đó không được hiểu là 0 giây — bộ lọc thô của bước sau là cặp (dung
+lượng, thời lượng), coi mọi video không rõ thời lượng là cùng 0 giây thì chúng
+dính hết vào nhau.
+
+#### Chặn cứng: thùng rác hiện tại không dùng được cho video — **đã gỡ**
+
+Bản cũ gọi `originalBytes()` — **nạp trọn file vào RAM** rồi ghi ra một bản sao,
+xong mới xoá bản gốc. Với ảnh 3 MB thì không sao. Với video 1 GB thì hai chuyện
+xảy ra: nạp 1 GB vào RAM là văng app, chắc chắn chứ không phải "có thể"; và kể
+cả stream được thì nó vẫn **nhân đôi dung lượng tạm thời** — trên đúng cái máy
+mà người ta đang dọn *vì nó đầy*.
+
+Đã sửa làm hai bước, cả hai đều xong:
+
+1. `MediaSourcePort.copyOriginalTo` chép theo dòng, không qua RAM. Đỉnh bộ nhớ
+   không còn phụ thuộc cỡ file.
+2. `TrashHolder` — thùng rác có **hai lối giữ file**, chọn theo thứ nguồn đỡ
+   được. Android 11+ đi `MediaStore` (`moveToTrash`/`restoreFromTrash`): file
+   **nằm nguyên tại chỗ**, không chép một byte nào, nên cỡ file hết là vấn đề.
+   Android 10 trở xuống và desktop vẫn chép sang thư mục riêng như cũ.
+
+Ba chỗ lệch giữa hai lối, đã xử lý và có test (`trash_system_test.dart`):
+
+- **Ảnh xem trước phải lưu trước.** Vào thùng rác của hệ thống rồi thì ảnh biến
+  khỏi mọi truy vấn thông thường, hỏi thumbnail lúc vẽ lưới là muộn. App giữ sẵn
+  một bản 720px (~100 KB) — vẫn rẻ hơn hàng nghìn lần so với chép cả file.
+- **Xoá hẳn phải nhờ nguồn**, vì file vẫn nằm trong thư viện chứ không nằm trong
+  thư mục của app.
+- **Hết hạn thì thôi theo dõi, không gọi xoá.** `purgeExpired` chạy lúc mở app,
+  mà xoá trên Android 11+ phải qua hộp thoại xác nhận của hệ thống — gọi ở đó là
+  một hộp thoại bật lên chẳng vì thao tác nào người dùng vừa làm.
+
+Còn lại: hộp thoại xác nhận của hệ thống hiện ở mỗi lượt xoá và mỗi lượt khôi
+phục. `MANAGE_MEDIA` bỏ được nó, nhưng đó là quyền phải xin riêng trong Cài đặt
+và nó chạm thẳng vào §8 — chưa quyết.
+
+Việc thêm video vào danh sách quét (`RequestType.image` ở `device_media_source`)
+thì vẫn chưa làm; giờ nó không còn xây trên nền lún nữa.
+
+#### Đo trên máy thật: Galaxy S24 FE, 3.583 mục, 31,7 GB
+
+Lần đầu toàn bộ phần video chạy đầu-cuối trên máy người dùng. Số đo, cùng một
+thư viện, cùng một máy:
+
+| Bước | Trước | Sau |
+|---|---|---|
+| Phân tích (mọi mục đã có chỉ mục) | 27–39 giây | 4,8 giây |
+| Xem video, lượt đầu | 61 giây, **chạm trần, chưa xong** | 44 giây, **34/34 xong** |
+| Xem video, lượt sau | — | **8 ms** |
+| Tổng một lượt quét lại | ~102 giây | **~7 giây** |
+
+Hai chỗ sửa, cả hai chỉ lộ ra khi cắm cáp vào máy thật:
+
+- **`asset.fileSize` là một lời gọi qua kênh platform cho từng mục**, không phải
+  một trường có sẵn. Với 3.583 mục đã nằm sẵn trong chỉ mục, bước "phân tích"
+  mất 27–39 giây **để không làm gì cả**. Tầng trên vốn đã đưa `knownModified`
+  xuống nguồn đúng để tránh chuyện đó; nguồn thư mục dùng nó từ lâu, nguồn thiết
+  bị thì bỏ quên.
+- **`OPTION_CLOSEST` phải giải mã từ keyframe trước đó tới đúng mốc.** Với bản
+  quay màn hình 2,79 GB (keyframe rất thưa) một khung mất hàng giây. Đổi sang
+  `OPTION_CLOSEST_SYNC` và bỏ qua video trên 300 MB thì hàng đợi chạy hết trong
+  ngân sách.
+
+**Cỡ trang: đo lại thì giả thuyết chỉ đúng một nửa.** Nâng cỡ trang trên di
+động từ 60 lên 300 (60 lượt qua kênh → 12) cắt bước phân tích từ 6,2 xuống
+**4,5 giây** — nhanh thêm 27%, không phải hai phần ba như dự đoán ghi ở đây
+trước đó. Nghĩa là chi phí **không nằm ở số lượt gọi mà ở lượng dữ liệu chuyển
+qua kênh**: 3.586 bản ghi asset vẫn phải đi qua đúng một lần, gộp thành ít gói
+hơn không làm chúng nhỏ đi.
+
+Cỡ trang để khác nhau theo nền tảng, cùng lý lẽ với `defaultConcurrency()`:
+trên desktop mỗi trang là một lượt `Future.wait` **mở từng file** đọc header,
+nên trang lớn chỉ đổi chỗ nghẽn này lấy chỗ nghẽn khác.
+
+Muốn cắt tiếp thì phải đổi cách hỏi chứ không phải đổi cỡ trang: chỉ hỏi những
+mục sửa sau lần quét trước (`updateTimeCond`). Nhưng khi đó app không còn thấy
+toàn bộ danh sách id, mà `pruneMissing` cần đúng thứ đó để dọn ảnh đã bị xoá
+bằng app khác — nhanh thêm vài giây, đổi lấy việc ảnh đã xoá nằm lại trong chỉ
+mục. **Không làm**: 4,5 giây cho thư viện 31,7 GB là con số dùng được, còn đánh
+đổi kia mua sự phức tạp bằng một chỗ sai âm thầm.
+
+Không có khung hình nào bị bỏ trong suốt lượt quét. Chỗ duy nhất trong log có
+dấu hiệu nghẽn là lúc mở app: `Skipped 46 frames` (~0,8 giây), tức là `init()`
+dọn thùng rác, dọn cache và đọc lại số liệu trên luồng chính.
+
+#### Tiêu chí "trùng" của video: ba mức, ba giá khác nhau
+
+Đường của ảnh là MD5 → dHash → embedding. Với video mức nào cũng phải sửa, vì
+đọc file đắt gấp hàng trăm lần.
+
+**Mức 1 — trùng file. Đã làm.** Hai chặng. Chặng một là cặp **(dung lượng, thời
+lượng)** lọc bằng SQL, **không đọc byte nào** — `videoHashCandidates`. Video lẻ
+loi không bao giờ đi tiếp: không có cái thứ hai cùng cặp số thì nó không thể là
+bản sao của ai cả. Chặng hai băm ba đoạn 1 MB (đầu/giữa/cuối) của phần còn đụng
+nhau — `VideoSampleHash`.
+
+Ba đoạn chứ không một: nhiều định dạng để phần mô tả ở đầu file, nên hai video
+khác nhau vẫn có thể giống nhau ở megabyte đầu. Đoạn giữa rơi vào giữa dòng hình
+ảnh; đoạn cuối bắt file cắt ngắn hoặc tải dở. Dung lượng được trộn vào dấu, nên
+hai file khác cỡ không bao giờ ra cùng một dấu.
+
+Đọc đúng ba đoạn đó mà không chép file là chỗ phải xuống tới `MainActivity`: từ
+Android 10, lấy `File` của một asset khiến hệ thống chép nguyên file vào cache
+app trước — 1 GB chép ra chỉ để đọc 1 MB ở giữa. `openFileDescriptor` đọc thẳng
+từ chỗ file đang nằm.
+
+**Bằng chứng ở đây yếu hơn ảnh một bậc**, và điều đó phải hiện ra ở giao diện:
+nhóm dựng từ dấu lấy mẫu **không tự tick chọn xoá**. Mỗi mục nặng hàng trăm MB
+và thường không có bản nào khác ở đâu cả.
+
+**Chặng nâng bằng chứng — đã làm.** `VideoFullHash` băm **trọn file** cho đúng
+những video đã lọt lưới lấy mẫu — lúc đó chỉ còn vài cặp — đọc theo khúc 4 MB
+qua `byteRange`, không qua `originalBytes`, nên đỉnh bộ nhớ là một khúc bất kể
+cỡ file. Khi **mọi** bản trong nhóm đã xác nhận cùng MD5 thì nhóm được tự tick:
+cùng từng byte là mức bằng chứng duy nhất §6.2 cho phép, và quyền gắn với từng
+nhóm chứ không với category. Ba ràng buộc giữ cho chặng này không phá lượt quét:
+
+- chạy **cuối** ngân sách video — nó chỉ nâng bằng chứng cho nhóm đã có, hết
+  giờ thì nhóm vẫn hiện, chỉ chưa tự tick, lượt sau băm tiếp;
+- file trên 1 GB (`VideoFullHash.maxBytes`) không băm, và chặn ngay trong SQL
+  của `videoFullHashCandidates` — không chặn thì video quá cỡ quay lại hàng đợi
+  ở mọi lượt quét, tính rồi trả null, một hàng đợi không bao giờ cạn;
+- MD5 lưu ngay từng cái một: mỗi mã là hàng chục giây đọc đĩa, mất vì thoát app
+  giữa chừng thì đắt hơn hẳn một dấu lấy mẫu.
+
+Video có MD5 vẫn đi đường video (`_exactDuplicates` bỏ qua video): nhãn "Ảnh
+trùng", cách bày xấp ảnh và cách chọn bản giữ theo độ nét đều là của ảnh, sai
+hết với video. MD5 ở đây là MD5 thuần của file — trùng khớp định nghĩa
+`md5Checksum` của Drive, nên về sau đối chiếu sao lưu cloud dùng lại được.
+
+**Mức 2 — cùng nội dung, khác file. Đã làm.** Clip gửi qua Zalo/Messenger bị nén
+lại: khác byte, khác dung lượng, thời lượng lệch vài chục mili giây. Lấy 5 khung
+hình ở **mốc tương đối** (10/30/50/70/90% thời lượng) rồi chạy đúng dHash sẵn có
+— `VideoFingerprint`. dHash bền với việc nén lại, đó chính là lý do nó được chọn
+cho ảnh.
+
+Bốn quyết định đáng ghi lại:
+
+- **Mốc tương đối, không tuyệt đối.** Hai bản của cùng một clip lệch nhau vài
+  chục mili giây thì mốc tương đối vẫn rơi vào cùng một cảnh. Đổi lại, bản **cắt
+  ngắn** không khớp bản gốc — đúng như mong muốn, hai thứ đó không phải bản sao
+  của nhau.
+- **Không lấy ở 0% và 100%.** Đầu video hay là cảnh tối hoặc logo, cuối hay là
+  màn hình đen; cả hai giống nhau ở *mọi* video và sẽ kéo hai clip chẳng liên
+  quan lại gần nhau.
+- **`OPTION_CLOSEST` chứ không `OPTION_CLOSEST_SYNC`.** Bản sync nhảy tới
+  keyframe gần nhất, mà hai lần mã hoá đặt keyframe ở những chỗ khác nhau — hai
+  khung lấy về có thể cách nhau cả giây.
+- **Cho phép đúng một khung trượt.** Cảnh chuyển động nhanh thì một mốc lệch vài
+  khung hình cũng đủ đổi hẳn dHash. Nới hơn nữa thì hai clip quay cùng một chỗ
+  vào hai lúc khác nhau bắt đầu dính vào nhau.
+
+Lưới lọc trước khi giải mã là **thời lượng** (±1 giây), không phải dung lượng —
+nén lại đổi hẳn dung lượng nhưng gần như không đổi thời lượng. Video đã biết là
+trùng file thì bỏ qua, tránh giải mã hai lần và tránh một video nằm hai nhóm.
+
+**Windows không có bộ giải mã nào**, nên `FolderMediaSource.videoFrame` trả về
+null và bản Windows dừng ở mức 1. Không hỏng gì — mục "video trùng nội dung"
+rỗng thay vì sai. Kèm ffmpeg vào để gỡ chỗ này là một quyết định khác hẳn.
+
+**Mức 3 — embedding video.** Bỏ. Không xứng chi phí trên máy người dùng.
+
+#### Mục đáng tiền khác của video
+
+**Clip lỡ tay — đã làm.** Video 1–2 giây (`DuplicateGrouper.accidentalClipMs`),
+quay nhầm trong túi hoặc lỡ tay chạm nút. Nhận ra chỉ bằng thời lượng, không đọc
+byte nào, tỉ lệ trúng rất cao. Ngưỡng thấp là cố ý: clip 3–4 giây có thể là một
+khoảnh khắc thật. Trên Windows mục này luôn rỗng vì nguồn thư mục không biết
+thời lượng — và đó là hành vi đúng: coi "không biết" là 0 giây thì **mọi** video
+đều bị gọi là clip lỡ tay.
+
+**Video quay màn hình — đã làm.** Nhận bằng tên file/thư mục
+(`VideoRules.isScreenRecording`), y như dự tính: đó là bằng chứng duy nhất —
+video không có EXIF camera để đối chiếu, kích thước khung hình thì trùng khít
+video thường — và may là bằng chứng rất chắc, vì tên do chính app quay đặt.
+Mẫu phủ Samsung (`Screen_Recording_*`, `DCIM/Screen recordings`), Android gốc
+(`screen-YYYYMMDD-*`), iOS ReplayKit (`RPReplay_*`) và thư mục của các app quay
+bên thứ ba. Nhận diện chạy ở **bước gom nhóm** trên `file_name`/`relative_path`
+đã có sẵn trong chỉ mục — không migration, logic thuần, test được
+(`screen_recording_test.dart`). Xếp **trước** ba mục xem lại: bản quay màn hình
+15 phút mà rơi vào "video quá dài" là mất đúng thông tin đáng giá nhất.
+Không tự tick — tên file nói "đây là bản quay màn hình", không nói "bản này
+thừa"; buổi họp quan trọng cũng là một bản quay màn hình.
+
+> `CleanupCategory.videoScreenRecording` nằm **cuối** enum dù thứ tự khai báo
+> là thứ tự hiển thị: `category` lưu xuống DB theo chỉ số, chèn vào giữa là mọi
+> nhóm đã lưu đổi loại sau khi nâng cấp — cùng ràng buộc với `PhotoKind.video`.
+
+**Chưa làm:** video nặng lâu không mở.
+
+Bốn nhóm video hiện có, xếp theo mức bằng chứng giảm dần. Duy nhất nhóm video
+trùng **đã xác nhận trọn file** được tự tick; còn lại đều chỉ hỏi:
+
+| Nhóm | Bằng chứng | Chi phí |
+|---|---|---|
+| Video trùng, đã xác nhận | cùng MD5 của trọn file | đọc trọn các bản đã lọt lưới, một lần trong đời |
+| Video trùng | cùng dung lượng + thời lượng + ba đoạn byte lấy mẫu | 3 MB đọc |
+| Video trùng nội dung | 5 khung hình, dHash khớp gần hết | 5 lần giải mã khung |
+| Clip lỡ tay | thời lượng ≤ 2 giây | không đọc gì |
+| Video quay màn hình | tên file/thư mục do app quay đặt | không đọc gì |
+
+#### Còn phần biên tập video thì sao
+
+Cắt, ghép, crop, gắn logo, lồng tiếng, khử nhiễu, tăng độ nét — đã cân nhắc và
+**chưa làm**, vì chúng chia làm hai loại rất khác nhau:
+
+- **Cắt và tách — đã làm.** `VideoTrimmer.kt`: `MediaExtractor` đọc gói dữ liệu
+  đã nén ra, `MediaMuxer` ghi thẳng sang file mới. Không giải mã, không mã hoá
+  lại, không ffmpeg. Ba chỗ phải nói ra chứ không được im lặng:
+  - **Điểm bắt đầu lùi về keyframe gần nhất** (`SEEK_TO_PREVIOUS_SYNC`), thường
+    sớm hơn dưới hai giây. Đó là bản chất của cắt lossless: video nén liên
+    khung, cắt giữa chừng thì phần đầu không có gì để dựa vào. Hàm trả về mốc
+    **thật** và giao diện hiện đúng nó — hứa cắt ở giây 10 rồi giao file bắt đầu
+    ở giây 8,4 là nói sai về thứ mình vừa làm.
+  - **Chép mọi track**, không riêng video. Bỏ track âm thanh là cắt xong video
+    câm, mà người dùng chỉ phát hiện sau khi bản gốc đã bị xoá.
+  - **Góc xoay nằm ở metadata**, không ở pixel (`setOrientationHint`). Quên nó
+    là video dọc thành quay ngang.
+  Bản gốc không bị đụng tới, nên cắt xong dung lượng *tăng* cho tới khi người
+  dùng tự xoá bản gốc — màn cắt nói thẳng điều đó.
+
+  **Đã kiểm trên máy thật** (Galaxy S24 FE, clip 1080×1920 quay bằng chính máy):
+  cắt một đoạn và tách làm hai đều ra file đúng, cả ba đều `1080×1920` — góc xoay
+  giữ nguyên — và log `MPEG4Writer` ghi `817 frames - Audio`, tức là track âm
+  thanh được chép sang. Điểm bắt đầu lùi 1,1–1,2 giây so với mốc đã chọn, đúng
+  khoảng cách keyframe của video quay bằng điện thoại.
+
+  Lần thử đầu tiên lộ ra một lỗi mà test không bắt được: `saveEdited` gọi
+  `saveImageWithPath` — **API của ảnh** — nên video cắt xong ghi ra file sạch sẽ
+  rồi không bao giờ vào được thư viện. Người dùng bấm Cắt, app báo xong, mà chẳng
+  thấy video mới đâu. MediaStore cũng đòi video nằm dưới `Movies/` chứ không phải
+  `Pictures/`. Đây là kiểu lỗi chỉ máy thật mới nói ra: mọi thứ *trước* bước lưu
+  đều đúng, và test thì dừng ở ranh giới đó.
+- **Nén lại** (4K→1080p, H.264→HEVC) — món giải phóng dung lượng lớn nhất, nhưng
+  phải mã hoá lại: vài phút CPU, đúng thứ §14.3 vừa đi chặn. Chưa làm.
+- **Biến app thành trình biên tập:** phần còn lại. Đều cần bộ mã hoá, tức là
+  ffmpeg: +20–40 MB mỗi ABI (app đang 32 MB) kèm chuyện giấy phép, và gói
+  `ffmpeg_kit_flutter` chính thức đã ngừng bảo trì — chỗ này cần kiểm lại trước
+  khi đặt cược. Nặng hơn: §8 hứa không ghi đè bản gốc, nên mọi bản sửa là file
+  mới, tức là **thêm** dung lượng — một app dọn dẹp mà mỗi thao tác lại sinh
+  thêm file thì hai nửa của nó chống nhau. Riêng khử nhiễu và tăng độ nét là mô
+  hình chạy trên từng khung hình: một phút video là 1.800 lần suy luận, trên
+  điện thoại là hàng giờ.
+
+Nếu làm phần biên tập thì nên là một **quyết định pivot có ý thức** — đổi cả
+định vị, dung lượng cài đặt và đối thủ — chứ không bò vào từng tính năng một.
 
 #### Video khác ảnh ở ba chỗ
 
@@ -975,6 +1243,47 @@ clip, rồi chạy đúng dHash + BK-tree đã có. Không cần thuật toán m
 Chấm điểm và bố cục không áp dụng được cho video, phải loại khỏi mục tiêu B
 giống cách ảnh chụp màn hình đang bị loại (§6.5).
 
+#### Thư mục do người dùng chọn — **đã làm**, và nó cộng thêm chứ không thay thế
+
+Người dùng chỉ một thư mục qua bộ chọn của hệ thống (`ACTION_OPEN_DOCUMENT_TREE`),
+app quét nó **cùng lúc** với thư viện của máy. Cách dễ hơn là đổi qua lại — một
+lúc một nguồn, đúng như bản Windows đang làm — nhưng nó bỏ mất đúng thứ đáng
+tiền nhất: **ảnh trùng giữa hai nơi**. Một tấm tải về nằm cả trong `Download`
+lẫn trong thư viện là dạng trùng hay gặp bậc nhất trên máy thật, và không nguồn
+đơn lẻ nào nhìn thấy cả hai.
+
+`CompositeSource` gộp nhiều nguồn thành một, và ba chỗ phải xử lý riêng:
+
+- **Định tuyến theo id.** Mỗi thao tác đến với một id và phải về đúng nguồn giữ
+  nó; nguồn nào biết id của mình thì khai qua `IdScoped` (SAF nhận mọi id bắt
+  đầu bằng `content://`). **Không** thêm tiền tố vào id: chỉ mục đang lưu id
+  thật, đổi chúng là mọi dòng cũ thành mồ côi và người dùng mất cả chỉ mục lẫn
+  thùng rác chỉ vì nâng cấp app.
+- **Phân trang nối tiếp.** Đi hết trang của nguồn này rồi mới sang nguồn kia;
+  trang cuối của mỗi nguồn có thể ngắn. Không sao — tầng trên chỉ dừng ở trang
+  **rỗng**, không dừng ở trang ngắn.
+- **Thùng rác hỏi theo từng ảnh.** Thư viện máy đi `MediaStore` (Android 11+),
+  thư mục SAF thì không có thùng rác nào nên app tự chép. Hỏi một lần cho cả
+  lượt là một nửa số ảnh đi nhầm đường: gửi ảnh trong thư mục sang `MediaStore`
+  thì hệ thống không biết nó là gì — ảnh vẫn nằm nguyên đó trong khi app đã ghi
+  rằng đã xoá. `supportsSystemTrash` vì thế nhận `id`.
+
+Phía Android, `SafFolder.kt` làm mọi việc với `content://` document URI: liệt kê
+đệ quy qua `DocumentsContract`, đọc theo khoảng và sinh thumbnail qua
+`openFileDescriptor` (không chép file), xoá qua `deleteDocument`, và khôi phục
+từ thùng rác bằng `createDocument` + chảy theo dòng. Quyền được giữ qua các lần
+mở app bằng `takePersistableUriPermission` — thiếu bước đó thì lần mở sau app
+mất quyền đọc chính thư mục nó đang hiển thị, và mọi ảnh trong đó thành ô xám
+không lý do. Bỏ thư mục thì **trả quyền lại** (`releasePersistableUriPermission`)
+chứ không giữ im lặng.
+
+Hai chỗ đã biết là hụt, ghi lại để khỏi tưởng là lỗi:
+
+- Ảnh trong thư mục SAF **không có EXIF được đọc**: `needingExif` đi qua đường
+  của nguồn thiết bị. Thời điểm sửa file thay cho ngày chụp.
+- Khôi phục từ thùng rác ghi vào **gốc** thư mục đã chọn chứ không phải đúng thư
+  mục con cũ: SAF không cho tạo document ở một đường dẫn tuỳ ý.
+
 #### File khác: đi đường hẹp, đừng xin quyền toàn bộ bộ nhớ
 
 Vấn đề không phải kỹ thuật mà là **quyền**. Từ Android 11, đọc file bất kỳ cần
@@ -993,11 +1302,18 @@ Android cho nó là mở rộng một trừu tượng đã có, không phải d�
 
 #### Thứ tự đề xuất
 
-1. Sửa thùng rác: chuyển file thay vì sao chép.
-2. Video trùng và clip lỡ tay — hai mục trúng nhiều nhất, dùng lại dHash sẵn có.
-3. Thư mục do người dùng chọn qua SAF, dùng lại `FolderMediaSource`.
+1. ~~Sửa thùng rác: chuyển file thay vì sao chép.~~ Xong.
+2. ~~Đưa video vào danh sách quét.~~ Xong — app thấy và đếm đúng dung lượng
+   video, nhưng chưa chỉ ra được video nào đáng xoá.
+3. ~~Video trùng file và clip lỡ tay.~~ Xong — lọc thô bằng cặp (dung lượng,
+   thời lượng) rồi băm ba đoạn lấy mẫu.
+4. ~~Video trùng **nội dung** (bản đã bị nén lại).~~ Xong trên Android; Windows
+   dừng ở mức 1 vì không có bộ giải mã.
+5. ~~Thư mục do người dùng chọn qua SAF.~~ Xong trên Android — và nó **cộng
+   thêm** vào thư viện chứ không thay thế, nên tìm được cả ảnh trùng giữa thư
+   mục đó với thư viện.
 
-### 14.2 Cảnh báo đồng bộ hiện ở mọi lần xoá nên mất tác dụng
+### 14.2 Cảnh báo đồng bộ hiện ở mọi lần xoá nên mất tác dụng — **đã sửa**
 
 `group_detail_screen.dart` hiện khối cảnh báo đỏ khi `backup != backedUp`. Mà
 `BackupStatus.backedUp` chỉ được đặt sau khi đối chiếu với cloud
@@ -1010,25 +1326,200 @@ cũng bật thì người ta ngừng đọc, và đúng ngày nó thật sự đ
 Một cảnh báo mất tác dụng còn tệ hơn không có cảnh báo, vì nó tạo cảm giác đã
 được nhắc.
 
-Hai đường ra, chọn một:
+Đã chọn đường thứ hai — chỉ cảnh báo khi máy có app đồng bộ ảnh. Đường thứ nhất
+(nối cloud để `backedUp` chạy thật) không giải quyết được chính chỗ này: người
+không nối cloud vẫn bị cảnh báo y như cũ.
 
-- nối cloud để `backedUp` chạy thật, rồi cảnh báo mới có nghĩa; hoặc
-- chỉ cảnh báo khi phát hiện máy đang thật sự bật đồng bộ ảnh.
+**Tín hiệu dùng được, và giới hạn của nó.** Android không có API công khai nào
+cho biết máy đang *bật* sao lưu ảnh. Thứ hỏi được là app đó **có được cài hay
+không** (`SyncApps`, `MainActivity.installedSyncApps`) — thô hơn hẳn, nhưng cắt
+đúng trường hợp cảnh báo chắc chắn là nhiễu: không có app nào thì không có gì để
+lan sang. Nên lời cảnh báo cũng đổi theo cho khớp với thứ app thật sự biết: "Máy
+này có Google Photos. Nếu đang bật sao lưu tự động, …" thay vì phán rằng đồng bộ
+đang bật.
 
-### 14.3 Tự phân tích bố cục ở thư viện lớn
+Hai chỗ dễ vấp:
+
+- Từ Android 11, hỏi về một gói khác chỉ trả lời được khi gói đó đã khai trong
+  `<queries>` của manifest. Thiếu khai báo thì câu hỏi luôn nhận về "không có" —
+  tức là cảnh báo **tắt hẳn trên đúng những máy cần nó**, im lặng, không lỗi nào.
+- Quyết định "có cảnh báo không" nằm ở `SyncApps.shouldWarn`, tách khỏi phần gọi
+  kênh platform để test được (`sync_warning_test.dart`). Cả hai hướng sai đều
+  tốn: hiện thừa thì cảnh báo thành nhiễu như cũ, hiện thiếu thì mất một cảnh
+  báo mà §9 xếp là rủi ro nặng nhất của dự án.
+
+Việc app nhìn xem máy có app nào đã được ghi vào phần Quyền riêng tư trong màn
+Giới thiệu — nói sai về thứ mình có nhìn tới thì tệ hơn hẳn việc nhìn tới nó.
+
+### 14.3 Tự phân tích bố cục ở thư viện lớn — **đã chặn, còn phải đo**
 
 Từ v1.0.7, phân tích bố cục tự chạy sau khi quét. Đo trên 259 ảnh: khoảng 90
 giây, chấp nhận được.
 
-Chưa đo lần nào ở quy mô thật. Thư viện điện thoại thường 10–30 nghìn ảnh, cùng
-nhịp đó là **một tới ba tiếng** CPU chạy liên tục ngay sau lần quét đầu — máy
-nóng, tụt pin, mà người dùng không hiểu vì sao. Trước v1.0.7 chuyện này không xảy
-ra vì phải tự bấm, tức là người bấm biết mình đang yêu cầu gì.
+Thư viện điện thoại thường 10–30 nghìn ảnh, cùng nhịp đó là **một tới ba tiếng**
+CPU chạy liên tục ngay sau lần quét đầu — máy nóng, tụt pin, mà người dùng không
+hiểu vì sao. Trước v1.0.7 chuyện này không xảy ra vì phải tự bấm, tức là người
+bấm biết mình đang yêu cầu gì.
 
-Cần đo trước, rồi chọn: giới hạn số ảnh mỗi phiên, hoặc chỉ chạy tiếp khi đang
-sạc, hoặc cả hai.
+**Đã làm: ngân sách cho lượt tự chạy.** `CompositionIndexer.run(budget:)` dừng
+khi hết giờ và để phần còn lại cho lần mở app sau; `SuggestController` truyền
+`autoBudget` = 90 giây cho lượt tự chạy và **không** truyền gì cho nút bấm tay.
+90 giây vì đó là nhịp duy nhất dự án đã đo trên máy thật và đã chấp nhận — không
+phải một con số bịa ra cho tròn.
+
+Ba chỗ dễ sai, đều im lặng, đều có test giữ (`composition_budget_test.dart`):
+
+- kiểm ngân sách **trước** khi làm gì thì lượt nào cũng không làm được ảnh nào,
+  và phần còn dở đứng nguyên mãi mãi. Nên chỗ kiểm nằm *sau* khi đã lưu một ảnh;
+- nhiều lượt ngắn nối nhau phải phân tích hết thư viện — chỉ cần một chỗ quên
+  đánh dấu là vòng lặp đó không bao giờ kết thúc;
+- hết ngân sách không phải là người dùng bấm dừng, nên nó không được đụng vào
+  `cancel()`.
+
+Ảnh mới nhất được xử lý trước (`needingComposition` sắp theo thời gian chụp giảm
+dần), nên phần làm được trong ngân sách cũng là phần người dùng hay xem nhất.
+Lúc dừng giữa chừng, thẻ ở tab Gợi ý nói thẳng còn bao nhiêu ảnh và bấm đâu để
+chạy tiếp — không thì người dùng chỉ thấy một thanh tiến độ đứng nửa chừng.
+
+**Còn phải đo.** Ngân sách chặn được phần tệ nhất, nhưng con số 350 ms mỗi ảnh
+vẫn là suy ra từ đúng một lượt đo 259 ảnh. `composition_bench_test.dart` đo nhịp
+thật rồi chiếu lên 10k/30k ảnh và in ra một lượt tự chạy làm được bao nhiêu:
+
+```bash
+MEDIA_AI_BIG_CORPUS=<thư mục ảnh> flutter test test/composition_bench_test.dart --timeout none
+```
+
+Chạy trên máy tính thì nhanh hơn điện thoại nhiều, nên nó để so tương đối chứ
+không thay được một lượt đo trên máy thật. Nếu đo xong vẫn thấy 90 giây mỗi lần
+mở app là quá nhiều thì bước tiếp theo là **chỉ chạy tiếp khi đang sạc** — cần
+thêm một plugin đọc trạng thái pin, nên chưa làm khi chưa có số liệu đòi.
 
 ### 14.4 iOS chưa dựng thử lần nào
 
 Xem §12. Cấu hình đã rà (deployment target 15.5, quyền, Podfile) nhưng cần macOS
 + Xcode mới dựng được. Không có đường vòng nào.
+
+### 14.5 Sáu mục phân loại mới, và cờ "bỏ qua"
+
+Thêm một lượt sáu mục, tất cả theo cùng nguyên tắc đã dùng cho video quay màn
+hình: **bằng chứng rẻ và chắc, lấy từ thứ chỉ mục đã biết sẵn**, không thêm
+model nào, không đọc thêm byte nào lúc gom nhóm.
+
+| Mục | Bằng chứng | Ghi chú |
+|---|---|---|
+| Ảnh tài liệu, hoá đơn | `PhotoKind.document` — đã tính sẵn từ lúc quét | Chỉ là đưa kết quả có sẵn ra thành nhóm |
+| Ảnh chụp lỡ trong túi | Độ sáng trung bình ≤ 8 hoặc ≥ 250 (`mean_luma`, cột mới v9) | Ngưỡng rất chặt, cố ý — bắt nhầm ảnh đêm nghệ thuật tệ hơn bỏ sót; ảnh cũ chưa đo (`NULL`) thì không đoán |
+| File hỏng | 0 byte, hoặc **đọc được byte mà không giải mã nổi** (`PhotoKind.broken`) | Thumbnail null đơn thuần KHÔNG đủ — có thể là trục trặc thoáng qua, mà nhãn dính rồi thì lần quét sau không gỡ (ảnh không đổi thì không phân tích lại). Trước đây các file này bị bỏ qua im lặng và làm số đếm lệch |
+| Video tải về / qua chat | Tên `VID-*-WA*`, `received_*`; thư mục WhatsApp/Messenger/Zalo/Telegram/Download | Bản video của "bản chia sẻ" bên ảnh |
+| Video cũ và nặng | Quay trước 2 năm + từ 100 MB | Thay thế khả thi cho "video nặng lâu không mở": Android không cho biết lần mở cuối, ngày quay thì biết sẵn. Xem-lại |
+| Ảnh nặng bất thường | ≥ max(20 MB, 8× trung vị ảnh của thư viện) | Cùng lý lẽ ngưỡng thích ứng với ảnh mờ (§6.3). Xem-lại |
+
+Thứ tự nhận có chủ ý: file hỏng trước mọi mục phán đoán (file không đọc được
+thì "mờ" hay "tài liệu" đều vô nghĩa); ảnh chụp lỡ **trước** ảnh mờ (tấm đen
+kịt chắc chắn cũng "mờ", nhưng "chụp lỡ trong túi" mới nói đúng chuyện gì xảy
+ra); quay màn hình trước video-qua-chat (bản quay màn hình gửi qua WhatsApp
+vẫn là bản quay màn hình).
+
+Một lỗi test đáng ghi lại: fixture ban đầu dùng **cùng một mẫu nhiễu** cho mọi
+ảnh, chỉ khác độ sáng — mà dHash so tương quan giữa các ô chứ không so độ sáng
+tuyệt đối, nên cả bộ bị gom thành một cụm "ảnh tương tự" trước khi mục cần test
+kịp chạy. Đúng bài học nền-phẳng-lì của §6.5, lần này ở phía test.
+
+#### Cờ "bỏ qua, không đề xuất lại"
+
+Người dùng đánh dấu được ảnh/video là **bỏ qua**: không vào bất kỳ nhóm dọn
+dẹp nào nữa, ở mọi lần quét sau. Đây là một nửa của user story "album/ảnh cần
+bảo vệ" (§5), làm ở mức từng ảnh.
+
+- `suggest_ignored` neo vào **id ảnh** (cột mới v9), cùng lý lẽ với
+  `keeper_pinned`: nhóm dựng lại sau mỗi lần quét, quyết định của người dùng
+  phải sống lâu hơn thế. Bộ gom nhận các id này vào `claimed` ngay từ đầu —
+  mọi bước sau tự tôn trọng. Bước trùng-tuyệt-đối xưa nay chạy đầu tiên nên
+  không nhìn `claimed`; giờ phải nhìn, và có test giữ.
+- Nút "Bỏ qua" đứng cạnh nút xoá trong màn chi tiết nhóm — nó là câu trả lời
+  thứ hai cho cùng một câu hỏi. Không hỏi xác nhận: thao tác không mất gì.
+- **Bỏ qua được thì phải xem lại được**, không thì không ai dám dùng: danh
+  sách "Đã bỏ qua" nằm trong Cài đặt, "Xem xét lại" gỡ cờ và mục quay về các
+  nhóm từ lần quét sau (không dựng lại nhóm ngay — gom nhóm cần nhìn toàn thư
+  viện, và người dùng đang đứng trong Cài đặt chứ không chờ một lượt quét).
+- Cùng vòng đời với `keeper_pinned`: file bị sửa đổi (modified) thì bị phân
+  tích lại và cờ mất theo — chấp nhận được, bản đã sửa đáng được xem xét lại.
+
+#### Bản gốc đã có bản chỉnh — đường giải phóng khép vòng chỉnh sửa
+
+§8 cấm ghi đè bản gốc nên mỗi lần chỉnh sửa là **thêm** một file — phần phình
+ra đó phải có đường thu lại, không thì mục tiêu A và B chống nhau. Liên kết
+bản chỉnh ↔ bản gốc vốn đã nằm trong bảng `edits` từ lâu (đủ ba cách nhận
+diện: id, tên, MD5) nhưng không màn hình nào dùng nó cả.
+
+Mục `editedOriginal` dựng từ chính bảng đó: mỗi bản gốc một nhóm kiểu chòm
+sao, **bản chỉnh là tấm giữ, bản gốc là ứng viên giải phóng**, dung lượng thu
+hồi là của bản gốc. Bốn quyết định:
+
+- đứng **sau** các nhóm trùng (bản gốc có bản sao từng byte thì nhóm trùng
+  đáng giá hơn — nó được tự tick) nhưng **trước** cụm perceptual — không thì
+  cặp gốc↔chỉnh rơi vào "ảnh tương tự", đúng mà vô dụng;
+- nhiều bản chỉnh thì ghép với bản **mới nhất** (thứ tự `EditDao.links()`),
+  bản cũ đứng ngoài như ảnh thường;
+- **không tự tick**: bản chỉnh có thể đã crop mất một phần khung, chỉ người
+  dùng biết phần đó có đáng giữ không. Nhưng cũng **không phải xem-lại** —
+  giải phóng bản gốc là thu hồi thật, được cộng vào lời hứa;
+- áp dụng cho cả video đã cắt/tách — cùng bảng `edits`, không phân biệt.
+
+### 14.6 Nâng cấp màn gợi ý chỉnh sửa: sờ vào ảnh, và chấm lại điểm
+
+Bốn lời chê thật từ chủ dự án, và cách xử lý:
+
+- **"Hai ảnh so sánh quá nhỏ"** → một ảnh to hết bề ngang, **giữ-để-xem bản
+  gốc** (nhấp nháy tại chỗ nhạy hơn hẳn hai ảnh cạnh nhau), chạm mở toàn màn
+  hình phóng đại 8× vẫn giữ-để-so được. Nhãn Trước/Sau đổi theo trạng thái.
+- **"Crop/xoay khó thao tác, không tương tác trên ảnh được"** → khung crop
+  trực tiếp (`interactive_crop.dart`): khung đứng yên — ảnh trượt dưới ngón,
+  véo để phóng, phần ngoài khung tối đi, thước xoay sát mép khung có hít về
+  0°/góc gợi ý kèm rung. Cố ý không dùng cử chỉ xoay hai ngón (kích hoạt nhầm
+  khi véo, không chỉnh nổi phần mười độ). Hình học tách thuần
+  (`crop_math.dart`, test riêng) — nhờ mô hình xoay→nội-tiếp→crop của
+  `EditApplier` nên tầng chạm chỉ thao tác NormRect trong [0,1].
+- **"Mẫu sẵn còn ít"** → khung gợi ý nắn theo tỉ lệ 1:1/4:5/16:9 quanh đúng
+  tâm chủ thể; tổ hợp "sửa hết lỗi + từng tông màu" — hai thứ vốn không loại
+  trừ nhau, bắt chọn một là dải mẫu nói dối về lựa chọn.
+- **"Chỉnh xong không biết tốt lên hay xấu đi"** → chấm lại điểm bản đang
+  chỉnh (debounce 250 ms), hiện "Kỹ thuật a → b · Thẩm mỹ c → d" xanh/đỏ ngay
+  dưới ảnh. Hai ràng buộc: đi qua đúng MỘT lối vào `analyze()`
+  (`MemoryMediaSource` bọc bytes thành nguồn, không mở lối tắt từng gây lỗi
+  hai-kết-quả), và độ phân giải mang đi chấm là của ảnh THẬT sau crop — cắt
+  40% ảnh là mất 40% điểm ảnh, điểm phải nói ra cái giá đó.
+
+Còn lại của mạch này (đã bàn, chưa làm): nhân bản công thức từ ảnh đã chỉnh +
+lưu preset đặt tên (EditPlan là dữ liệu thuần, bảng `edits` đã lưu vết; chỉ
+chuyển bộ lọc màu, không chuyển crop/xoay); import LUT `.cube` — cửa hợp pháp
+duy nhất mang tông màu app khác vào; wipe slider cho chỉnh cùng khung hình và
+khung-vẽ-đè cho gợi ý crop.
+
+
+### 14.7 Presets: dùng lại công thức, LUT ngoài, và bộ tông dựng sẵn
+
+Bốn tầng, từ trong ra ngoài — DB v10 (edits lưu `plan_json`) và v11 (bảng
+`presets`):
+
+1. **Công thức gần đây** — mỗi lần Áp dụng, công thức lưu kèm liên kết; ảnh
+   sau tự thấy 5 công thức mới nhất trong dải mẫu. Chỉ mang bộ lọc màu sang,
+   không mang crop/xoay — khung hình thuộc về từng ảnh.
+2. **Preset đặt tên** — nút "Lưu công thức", hiện trong dải mẫu mọi ảnh.
+3. **Nhập LUT `.cube`** (`cube_lut.dart`) — cửa hợp pháp duy nhất mang tông
+   màu app khác vào: parser + nội suy tam tuyến tính thuần Dart, file chép
+   vào thư mục app, tên lấy từ TITLE, lỗi báo đúng bệnh. LUT áp SAU mọi bộ
+   lọc; file mất/hỏng thì bỏ qua êm.
+4. **Bộ tông dựng sẵn** — 29 preset từ đặc tả `docs/LUT.md` (6 signature +
+   23 theo thể loại). Engine tham số kiểu Lightroom rút gọn nằm ở
+   `lut_presets.dart` (lib, không phải tool): app dựng bảng 33³ **trong RAM**
+   qua `lutPath: "builtin:<id>"` — không đóng 28 MB file vào gói cài;
+   `tool/generate_luts.dart` chỉ là vỏ xuất `.cube` để chia sẻ. Nút "Bộ tông
+   có sẵn" nạp một lần theo yêu cầu, không tự nạp lúc mở màn (29 preview là
+   cái giá ai muốn mới trả).
+
+Kèm trong đợt này: sửa mượt phần chỉnh tay (kéo/véo giữ trạng thái cục bộ,
+báo cha một lần lúc thả; render + chấm điểm sang isolate — bài học "closure
+inline trong State kéo cả cây widget sang isolate" đã thành hàm static nhận
+tham số tường minh; `_EagerScale` thắng ListView trong khung; phóng quanh
+điểm đặt ngón `scaledAt`).
