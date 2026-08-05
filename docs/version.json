@@ -1,9 +1,9 @@
 {
-  "versionCode": 21,
-  "versionName": "1.0.20",
-  "releasedAt": "2026-08-05",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.20/MediaKIT-1.0.20-arm64-v8a.apk",
-  "sizeBytes": 34315964,
-  "sha256": "ce94e14ee0a36b534d8d108a4bb7e6d32480f8572c041b89815178e98dc8af1d",
-  "notes": "Bản cập nhật lớn nhất từ trước tới nay. Dọn dẹp: 7 mục phân loại mới (video quay màn hình, video qua chat, video cũ và nặng, ảnh tài liệu, ảnh chụp lỡ, file hỏng, ảnh nặng bất thường), nút Bỏ qua không đề xuất lại, và mục 'Bản gốc đã có bản chỉnh' giúp giải phóng ảnh gốc sau khi chỉnh. Chỉnh sửa: thao tác trực tiếp trên ảnh (kéo khung, véo phóng, thước xoay), giữ để so với bản gốc, điểm chấm lại ngay khi chỉnh, dùng lại công thức, nhập LUT .cube, và 29 tông màu dựng sẵn."
+  "versionCode": 22,
+  "versionName": "1.0.21",
+  "releasedAt": "2026-08-06",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.21/MediaKIT-1.0.21-arm64-v8a.apk",
+  "sizeBytes": 34316056,
+  "sha256": "706527c819ce3d28d09dd2a9941aa0cf254a2827be7d2b874d5374f0790d5c90",
+  "notes": "Hai tính năng mới: 'Ảnh đẹp nhất tháng' — bảng vàng những tấm điểm cao nhất của từng tháng, mặt ngược của dọn dẹp; và 'Ghép video' — nối các clip quay cùng máy thành một video, không mã hoá lại nên nhanh và không mất chất lượng, app tự từ chối kèm lý do khi hai clip khác thông số. Kèm sửa vặt và bước tự kiểm chữ ký trong quy trình phát hành."
 }
