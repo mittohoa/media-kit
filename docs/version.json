@@ -1,9 +1,9 @@
 {
-  "versionCode": 24,
-  "versionName": "1.0.23",
+  "versionCode": 25,
+  "versionName": "1.0.24",
   "releasedAt": "2026-08-06",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.23/MediaKIT-1.0.23-arm64-v8a.apk",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.24/MediaKIT-1.0.24-arm64-v8a.apk",
   "sizeBytes": 47649455,
-  "sha256": "d1f21b6012b31fbeea8ca9addfc8bba72242fffac62a18eba6cbb353403c90ad",
-  "notes": "Máy tự khuyên tông màu hợp với từng ảnh: mở ảnh là thấy ô ★ — hoàng hôn được khuyên Golden Hour, biển được khuyên Tropical, đồ ăn được khuyên Food Fresh… theo đúng chủ đề máy nhìn thấy trong ảnh. Chọn tông có cá tính mà điểm kỹ thuật giảm nhẹ là bình thường — app giải thích ngay tại chỗ vì sao."
+  "sha256": "d8f77b197820fb4eb931cacdacaadc89d876b6e4676e6da87e5a63bcb6ce0810",
+  "notes": "Duyệt thư viện theo chủ đề: máy tự xếp ảnh vào nhóm Người, Đồ ăn, Phong cảnh, Biển, Bầu trời, Phố xá… ngay trong lượt phân tích — mở thẻ Duyệt theo chủ đề ở tab Gợi ý là xem theo nhóm được liền. Chủ đề gán dần khi ảnh được phân tích."
 }
