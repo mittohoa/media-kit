@@ -1,9 +1,9 @@
 {
-  "versionCode": 22,
-  "versionName": "1.0.21",
+  "versionCode": 23,
+  "versionName": "1.0.22",
   "releasedAt": "2026-08-06",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.21/MediaKIT-1.0.21-arm64-v8a.apk",
-  "sizeBytes": 34316056,
-  "sha256": "706527c819ce3d28d09dd2a9941aa0cf254a2827be7d2b874d5374f0790d5c90",
-  "notes": "Hai tính năng mới: 'Ảnh đẹp nhất tháng' — bảng vàng những tấm điểm cao nhất của từng tháng, mặt ngược của dọn dẹp; và 'Ghép video' — nối các clip quay cùng máy thành một video, không mã hoá lại nên nhanh và không mất chất lượng, app tự từ chối kèm lý do khi hai clip khác thông số. Kèm sửa vặt và bước tự kiểm chữ ký trong quy trình phát hành."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.22/MediaKIT-1.0.22-arm64-v8a.apk",
+  "sizeBytes": 34326936,
+  "sha256": "59b23b04ad2f45b0c3b8604107dad7491d87b20311af8afba8e743dedd538363",
+  "notes": "Chỉnh tay hoàn thiện: tám tay nắm kéo khung ở góc và cạnh, hoàn tác/làm lại từng bước. Cảnh báo xoá-lan giờ nhận cả Samsung Cloud — máy Samsung trước đây không được cảnh báo. Phân tích bố cục tự chạy chỉ khi đang cắm sạc để không nóng máy, cắm vào là tự chạy tiếp; bấm nút vẫn chạy ngay bất kể pin."
 }
