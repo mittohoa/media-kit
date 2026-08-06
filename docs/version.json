@@ -1,9 +1,9 @@
 {
-  "versionCode": 23,
-  "versionName": "1.0.22",
+  "versionCode": 24,
+  "versionName": "1.0.23",
   "releasedAt": "2026-08-06",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.22/MediaKIT-1.0.22-arm64-v8a.apk",
-  "sizeBytes": 34326936,
-  "sha256": "59b23b04ad2f45b0c3b8604107dad7491d87b20311af8afba8e743dedd538363",
-  "notes": "Chỉnh tay hoàn thiện: tám tay nắm kéo khung ở góc và cạnh, hoàn tác/làm lại từng bước. Cảnh báo xoá-lan giờ nhận cả Samsung Cloud — máy Samsung trước đây không được cảnh báo. Phân tích bố cục tự chạy chỉ khi đang cắm sạc để không nóng máy, cắm vào là tự chạy tiếp; bấm nút vẫn chạy ngay bất kể pin."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.23/MediaKIT-1.0.23-arm64-v8a.apk",
+  "sizeBytes": 47649455,
+  "sha256": "d1f21b6012b31fbeea8ca9addfc8bba72242fffac62a18eba6cbb353403c90ad",
+  "notes": "Máy tự khuyên tông màu hợp với từng ảnh: mở ảnh là thấy ô ★ — hoàng hôn được khuyên Golden Hour, biển được khuyên Tropical, đồ ăn được khuyên Food Fresh… theo đúng chủ đề máy nhìn thấy trong ảnh. Chọn tông có cá tính mà điểm kỹ thuật giảm nhẹ là bình thường — app giải thích ngay tại chỗ vì sao."
 }
