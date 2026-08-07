@@ -1,9 +1,9 @@
 {
-  "versionCode": 28,
-  "versionName": "1.0.27",
+  "versionCode": 29,
+  "versionName": "1.0.28",
   "releasedAt": "2026-08-07",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.27/MediaKIT-1.0.27-arm64-v8a.apk",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.28/MediaKIT-1.0.28-arm64-v8a.apk",
   "sizeBytes": 48440072,
-  "sha256": "7e305ce8442b0138c30656a0a4f9baf2d367835ab43c8e72d7ebb939deee2a2e",
-  "notes": "Thùng rác đối chiếu với thực tế: ảnh bạn đã xoá hẳn từ Thư viện của máy không còn nằm lại đây và không còn bị tính vào dung lượng đang giữ. Thêm nút Làm trống thùng rác. Cài đặt chia thành bốn nhóm, Thùng rác không còn nằm tận đáy."
+  "sha256": "e626f0eb89dbe30ea30169ee7ef839ac1f9d7ac1721e0342d6477af38d5e38be",
+  "notes": "Không còn nói 'đã dọn' khi ảnh mới chỉ vào thùng rác — chỗ trống chưa được trả lại cho tới khi bạn làm trống nó. Màn chính hiện dung lượng trống thật của máy, kèm vạch riêng cho phần thùng rác đang giữ và dòng nhắc lấy lại được bao nhiêu. Đối chiếu thùng rác giờ chỉ tốn một truy vấn thay vì mỗi mục một lượt."
 }
