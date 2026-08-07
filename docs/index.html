@@ -91,6 +91,13 @@
     border-radius: 18px; border: 1px solid var(--border);
   }
   .shot figcaption { color: var(--muted); font-size: .88rem; margin-top: 10px; }
+  /* Tiêu đề phụ trong một mục — nhỏ và mờ hơn h2 để phần lịch sử không
+     tranh chỗ với phần bản mới nhất, thứ người ta vào đọc. */
+  .since {
+    margin: 34px 0 10px; font-size: 1rem; font-weight: 600;
+    color: var(--muted); letter-spacing: .02em; text-transform: uppercase;
+  }
+
   .note {
     margin-top: 26px; padding: 16px 18px;
     border-left: 3px solid var(--brand-b);
@@ -150,9 +157,10 @@
         <h3>Dọn ảnh</h3>
         <p>Gom ảnh trùng, ảnh tương tự, ảnh mờ, ảnh chụp màn hình, ảnh tài liệu
            và hoá đơn, ảnh chụp lỡ trong túi, file hỏng, bản chia sẻ chất lượng
-           thấp — kèm dung lượng giải phóng được của từng nhóm. Mục nào không
-           muốn bị nhắc nữa thì bấm <strong>Bỏ qua</strong>, xem lại được trong
-           Cài đặt.</p>
+           thấp — kèm dung lượng giải phóng được của từng nhóm. Nhóm ảnh tương
+           tự đọc cả <strong>giờ chụp</strong> chứ không chỉ nhìn hình, nên một
+           loạt chụp nhanh nằm gọn một nhóm. Mục nào không muốn bị nhắc nữa thì
+           bấm <strong>Bỏ qua</strong>, xem lại được trong Cài đặt.</p>
       </div>
       <div class="card">
         <span class="emoji">🎬</span>
@@ -160,7 +168,9 @@
         <p>Video trùng — kể cả bản đã bị nén lại khi gửi qua Zalo hay Messenger;
            bản xác nhận cùng từng byte được tick sẵn hộ bạn. Thêm video quay màn
            hình, video tải về qua chat, clip lỡ tay, video cũ mà nặng, và danh
-           sách video nặng nhất để biết dung lượng đang nằm ở đâu.</p>
+           sách video nặng nhất để biết dung lượng đang nằm ở đâu. Không muốn xoá
+           cả clip thì <strong>cắt, tách hoặc ghép</strong> ngay trong app —
+           không mã hoá lại nên nhanh và không mất chất lượng.</p>
       </div>
       <div class="card">
         <span class="emoji">✨</span>
@@ -169,8 +179,17 @@
            Chỉnh ngay trên ảnh: kéo khung, véo phóng, xoay từng phần mười độ —
            giữ ngón tay để so với bản gốc, và điểm chấm lại ngay khi bạn chỉnh.
            Ưng tông màu nào thì lưu thành công thức dùng lại, nhập LUT
-           <code>.cube</code> từ Lightroom, hoặc bấm một nút lấy 29 tông dựng
-           sẵn.</p>
+           <code>.cube</code> từ Lightroom, hoặc để app tự chọn tông theo chủ đề
+           của chính bức ảnh.</p>
+      </div>
+      <div class="card">
+        <span class="emoji">👑</span>
+        <h3>Tìm ảnh đáng khoe</h3>
+        <p>Mặt ngược của dọn dẹp: app không chỉ biết chê ảnh xấu.
+           <strong>Ảnh đẹp nhất tháng</strong> lọc ra quán quân của từng tháng
+           theo điểm kỹ thuật và thẩm mỹ, còn <strong>Duyệt theo chủ đề</strong>
+           chia thư viện thành người, đồ ăn, phong cảnh, thú cưng… để tìm lại
+           một tấm mà không phải cuộn hết cả năm.</p>
       </div>
       <div class="card">
         <span class="emoji">🔒</span>
@@ -185,20 +204,49 @@
 
 <section>
   <div class="wrap">
-    <h2>Mới trong 1.0.20</h2>
-    <p class="lead">Bản cập nhật lớn nhất từ trước tới nay — hai mảng chính:</p>
+    <h2>Mới trong 1.0.26</h2>
+    <p class="lead">Nhóm “ảnh tương tự” làm lại từ gốc, và bốn chỗ bớt thao tác
+       lúc đang dọn.</p>
     <ul class="plain">
-      <li><strong>Bảy nhóm dọn dẹp mới</strong>: video quay màn hình, video tải
-          về qua chat, video cũ và nặng, ảnh tài liệu/hoá đơn, ảnh chụp lỡ
-          trong túi, file hỏng, ảnh nặng bất thường — cùng nút
-          <strong>Bỏ qua</strong> cho mục bạn không muốn bị nhắc lại, và nhóm
-          <strong>“Bản gốc đã có bản chỉnh”</strong> để giải phóng ảnh gốc sau
-          khi đã ưng bản chỉnh sửa.</li>
-      <li><strong>Màn chỉnh sửa làm lại toàn bộ</strong>: thao tác trực tiếp
-          trên ảnh, so trước/sau bằng cách giữ ngón tay, điểm số chấm lại theo
-          từng thao tác, dùng lại công thức đã chỉnh, nhập LUT
-          <code>.cube</code>, và bộ 29 tông màu dựng sẵn (Cinematic
-          Teal&nbsp;&amp;&nbsp;Orange, Golden Hour, Night Neon…).</li>
+      <li><strong>Gom ảnh tương tự chính xác hơn hẳn.</strong> Trước đây app đo
+          độ giống nhau bằng đúng một ngưỡng cho mọi cặp ảnh, và nó sai theo cả
+          hai chiều cùng lúc: ảnh khác hẳn nhau bị gom chung, còn một loạt chụp
+          nhanh lại vỡ ra nhiều nhóm. Thứ còn thiếu không nằm ở hình ảnh mà ở
+          <strong>giờ chụp</strong> — hai tấm cách nhau vài giây gần như chắc
+          chắn là cùng một cảnh, hai tấm cách nhau nửa năm mà trông giống nhau
+          thì gần như chắc chắn là trùng hợp. Giờ ngưỡng co giãn theo khoảng
+          cách thời gian, cộng thêm trần độ rộng của nhóm và phép loại theo
+          chiều khung: ảnh ngang không bao giờ chung nhóm với ảnh dọc.</li>
+      <li><strong>Xoá ngay trong màn xem ảnh.</strong> Xem cỡ lớn mới quyết định
+          xoá được, mà trước đây phải thoát ra tìm lại đúng ô vừa xem để tick.
+          Xoá xong tấm kế trượt vào đúng chỗ trống, xem tiếp không phải vuốt.</li>
+      <li><strong>Tắt được hộp thoại xác nhận</strong> trong Cài đặt → Xoá ảnh.
+          Mặc định vẫn bật. Dù bật hay tắt, ảnh vẫn nằm trong thùng rác 30 ngày
+          và khôi phục lại được.</li>
+      <li><strong>Xoá xong tự thoát chế độ đã chọn</strong> — dọn hết một nhóm
+          là xem tiếp ảnh nhóm sau được luôn, không phải bấm nút thoát.</li>
+      <li><strong>Bỏ dấu bỏ qua hàng loạt</strong> trong Cài đặt → Đã bỏ qua.
+          Bỏ qua vài trăm tấm mất một cú bấm, nên lấy lại cũng phải thế.</li>
+    </ul>
+    <p class="note">Sau khi cập nhật, bấm <strong>Quét lại</strong> thì cách gom
+       nhóm mới có hiệu lực — các nhóm cũ đã nằm sẵn trong máy từ lượt quét
+       trước.</p>
+
+    <h3 class="since">Các bản trước</h3>
+    <ul class="plain">
+      <li><strong>1.0.23 – 1.0.25</strong>: app tự chọn tông màu theo chủ đề của
+          chính bức ảnh, màn <strong>Duyệt theo chủ đề</strong> (người, đồ ăn,
+          phong cảnh, thú cưng…), và bản vá cho lỗi không mở được app.</li>
+      <li><strong>1.0.21 – 1.0.22</strong>: cắt, tách và <strong>ghép video
+          không mã hoá lại</strong> nên không mất chất lượng; chỉnh tay bằng tám
+          tay nắm kéo khung kèm hoàn tác/làm lại; phân tích bố cục chỉ tự chạy
+          khi máy đang sạc.</li>
+      <li><strong>1.0.20</strong>: bảy nhóm dọn dẹp mới (video quay màn hình,
+          video tải về qua chat, video cũ và nặng, ảnh tài liệu/hoá đơn, ảnh
+          chụp lỡ trong túi, file hỏng, ảnh nặng bất thường), nút
+          <strong>Bỏ qua</strong>, nhóm “Bản gốc đã có bản chỉnh”, và màn chỉnh
+          sửa làm lại toàn bộ với LUT <code>.cube</code> cùng 29 tông dựng
+          sẵn.</li>
     </ul>
   </div>
 </section>
