@@ -204,7 +204,33 @@
 
 <section>
   <div class="wrap">
-    <h2>Mới trong 1.0.28</h2>
+    <h2>Mới trong 1.0.29</h2>
+    <p class="lead">Ảnh gần giống nhau thôi bị tách nhóm.</p>
+    <ul class="plain">
+      <li><strong>Sửa chỗ 1.0.26 làm quá tay.</strong> Bản đó dùng thời điểm
+          chụp để gom nhóm chính xác hơn — ảnh chụp liên tiếp được nới ngưỡng
+          nên không còn vỡ nhóm. Nhưng nó làm luôn chiều ngược lại: ảnh chụp
+          cách nhau hơn nửa tiếng bị <em>siết</em> ngưỡng, chặt hơn cả trước khi
+          có tính năng. Kết quả là hai tấm gần giống nhau chụp cách nhau vài
+          tiếng, vốn gom được, lại bị tách ra.</li>
+      <li><strong>Và một hậu quả không ai nhìn thấy.</strong> Nhóm “Bản chia sẻ
+          chất lượng thấp” chỉ hình thành khi ảnh gốc và bản chia sẻ nằm chung
+          một nhóm — mà bản chia sẻ thì luôn tới sau hàng tháng, nên nó lặng lẽ
+          mất bớt trường hợp.</li>
+      <li><strong>Giờ thời gian chỉ dùng để nới, không bao giờ siết.</strong>
+          “Chụp xa nhau” không phải bằng chứng rằng hai tấm khác nhau: người ta
+          chụp lại cùng một cảnh sau nhiều ngày, ảnh được gửi đi gửi lại. Việc
+          loại ảnh không liên quan dồn cho hai phép kiểm nói về chính hai bức
+          ảnh — trần độ rộng của nhóm, và ảnh ngang không bao giờ chung nhóm với
+          ảnh dọc.</li>
+      <li><strong>Chẩn đoán gom nhóm</strong> trong Cài đặt → Nâng cao: cho biết
+          <em>vì sao</em> những cặp trông giống nhau lại không vào chung nhóm,
+          kèm khoảng cách và thời gian giữa hai tấm. Ngưỡng gom nhóm tới nay vẫn
+          chọn bằng lý lẽ; cái này là để chỉnh nó bằng số liệu thật.</li>
+    </ul>
+    <p class="note">Nhớ bấm <strong>Quét lại</strong> sau khi cập nhật.</p>
+
+    <h3 class="since">Trong 1.0.28</h3>
     <p class="lead">App thôi nói quá, và lần đầu hiện con số bạn kiểm chứng
        được.</p>
     <ul class="plain">
