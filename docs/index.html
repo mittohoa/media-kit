@@ -204,7 +204,30 @@
 
 <section>
   <div class="wrap">
-    <h2>Mới trong 1.0.26</h2>
+    <h2>Mới trong 1.0.27</h2>
+    <p class="lead">Thùng rác nói đúng sự thật, và dọn được một phát.</p>
+    <ul class="plain">
+      <li><strong>Xoá ảnh không hề tạo bản thứ hai.</strong> Từ Android 11 trở
+          lên, Media KIT chỉ nhờ hệ thống đánh dấu ảnh là đã bỏ — file nằm
+          nguyên tại chỗ, không chép đi đâu cả. Thùng rác của máy và Thùng rác
+          của Media KIT đang trỏ vào <em>cùng một file</em>. Đó cũng là lý do
+          thùng rác dùng được cho video: cách chép file cần thêm đúng bằng cỡ
+          video trống trên máy, ngay lúc bạn dọn <em>vì máy đã đầy</em>.</li>
+      <li><strong>Thùng rác đối chiếu lại với thực tế.</strong> Vì file không
+          nằm trong tay app, khi bạn xoá hẳn nó từ Thư viện của máy thì app
+          không hay biết: mục vẫn nằm lại, trông như còn khôi phục được, và
+          dung lượng của nó vẫn bị tính vào con số “đang giữ” — một con số sai.
+          Giờ app kiểm lại mỗi lần mở app và mỗi lần mở màn Thùng rác, gỡ những
+          mục đã mất kèm một dòng báo chứ không lặng lẽ.</li>
+      <li><strong>Nút Làm trống thùng rác</strong> nằm sẵn ở tiêu đề. Trước đây
+          phải nhấn giữ một ảnh để vào chế độ chọn, bấm Chọn tất cả, rồi mới
+          xoá được.</li>
+      <li><strong>Cài đặt chia bốn nhóm</strong> — Hiển thị, Dọn dẹp, Thư viện
+          ảnh, Nâng cao. Thùng rác không còn nằm tận đáy dưới cả phần chẩn
+          đoán.</li>
+    </ul>
+
+    <h3 class="since">Mới trong 1.0.26</h3>
     <p class="lead">Nhóm “ảnh tương tự” làm lại từ gốc, và bốn chỗ bớt thao tác
        lúc đang dọn.</p>
     <ul class="plain">
@@ -232,7 +255,7 @@
        nhóm mới có hiệu lực — các nhóm cũ đã nằm sẵn trong máy từ lượt quét
        trước.</p>
 
-    <h3 class="since">Các bản trước</h3>
+    <h3 class="since">Xa hơn nữa</h3>
     <ul class="plain">
       <li><strong>1.0.23 – 1.0.25</strong>: app tự chọn tông màu theo chủ đề của
           chính bức ảnh, màn <strong>Duyệt theo chủ đề</strong> (người, đồ ăn,
@@ -256,7 +279,9 @@
     <h2>Ba nguyên tắc không thoả hiệp</h2>
     <ul class="plain">
       <li><strong>Không bao giờ tự xoá.</strong> App chỉ đề xuất; bạn tự tick, tự
-          bấm. Ảnh đã xoá nằm trong thùng rác 30 ngày.</li>
+          bấm. Ảnh đã xoá nằm trong thùng rác 30 ngày — và thùng rác đó
+          <strong>không giữ thêm một bản sao nào</strong>, nó chỉ nhờ hệ thống
+          đánh dấu, file nằm nguyên tại chỗ.</li>
       <li><strong>Không bao giờ ghi đè ảnh gốc.</strong> Mỗi lần chỉnh sửa ghi ra
           một file mới trong album riêng, đóng dấu để tra ngược về ảnh gốc.</li>
       <li><strong>Không gửi ảnh đi đâu.</strong> Không tài khoản, không máy chủ,
