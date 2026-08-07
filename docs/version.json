@@ -1,9 +1,9 @@
 {
-  "versionCode": 27,
-  "versionName": "1.0.26",
+  "versionCode": 28,
+  "versionName": "1.0.27",
   "releasedAt": "2026-08-07",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.26/MediaKIT-1.0.26-arm64-v8a.apk",
-  "sizeBytes": 48374456,
-  "sha256": "ff045d70b9d216c6913e981bd6299a56114a5b8d4e1af8d1a957b2876f5f2e2f",
-  "notes": "Gom nhóm ảnh tương tự chính xác hơn: bán kính co giãn theo thời gian chụp nên loạt chụp nhanh không còn vỡ nhóm, ảnh khác hẳn nhau không còn bị gom chung. Xoá được ngay trong màn xem ảnh. Tắt được hỏi xác nhận trước khi vào thùng rác. Xoá xong tự thoát chế độ chọn. Bỏ dấu bỏ qua hàng loạt."
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.27/MediaKIT-1.0.27-arm64-v8a.apk",
+  "sizeBytes": 48440072,
+  "sha256": "7e305ce8442b0138c30656a0a4f9baf2d367835ab43c8e72d7ebb939deee2a2e",
+  "notes": "Thùng rác đối chiếu với thực tế: ảnh bạn đã xoá hẳn từ Thư viện của máy không còn nằm lại đây và không còn bị tính vào dung lượng đang giữ. Thêm nút Làm trống thùng rác. Cài đặt chia thành bốn nhóm, Thùng rác không còn nằm tận đáy."
 }
