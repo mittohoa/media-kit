@@ -1,9 +1,9 @@
 {
-  "versionCode": 26,
-  "versionName": "1.0.25",
-  "releasedAt": "2026-08-06",
-  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.25/MediaKIT-1.0.25-arm64-v8a.apk",
-  "sizeBytes": 48243244,
-  "sha256": "0eca30d996b8b3c7308118a06cdbbd15b26ad585760d4effe00070c98ab12d4b",
-  "notes": "Bản sửa lỗi khẩn: 1.0.23 và 1.0.24 bị lỗi không mở được app trên một số máy — nếu bạn đang dính, tải bản này cài đè (hoặc gỡ ra cài lại) là ổn định trở lại. Gồm đủ tính năng của hai bản trước: máy khuyên tông màu theo chủ đề ảnh (ô ★), và Duyệt thư viện theo chủ đề (thẻ 🗂️ tab Gợi ý)."
+  "versionCode": 27,
+  "versionName": "1.0.26",
+  "releasedAt": "2026-08-07",
+  "apkUrl": "https://github.com/mittohoa/media-kit/releases/download/v1.0.26/MediaKIT-1.0.26-arm64-v8a.apk",
+  "sizeBytes": 48374456,
+  "sha256": "ff045d70b9d216c6913e981bd6299a56114a5b8d4e1af8d1a957b2876f5f2e2f",
+  "notes": "Gom nhóm ảnh tương tự chính xác hơn: bán kính co giãn theo thời gian chụp nên loạt chụp nhanh không còn vỡ nhóm, ảnh khác hẳn nhau không còn bị gom chung. Xoá được ngay trong màn xem ảnh. Tắt được hỏi xác nhận trước khi vào thùng rác. Xoá xong tự thoát chế độ chọn. Bỏ dấu bỏ qua hàng loạt."
 }
